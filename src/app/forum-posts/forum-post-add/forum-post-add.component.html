@@ -1,0 +1,41 @@
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="center center" [@simpleFadeAnimation]>
+    <mz-card style="width: 100%; margin-top: 3%"
+             [hoverable]="true">
+      <mz-card-title style="text-align: center; margin-top: 3%">
+        <h1 class="cardTitle">Add Post</h1>
+        <hr style=" margin-top: 1%">
+      </mz-card-title>
+
+      <mz-card-content style="text-align: center">
+        <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+
+        <mz-input-container >
+          <input mz-input type="text" placeholder="Post Title" style="width: 400px; margin-top: 3%" formControlName="postName">
+        </mz-input-container>
+        <mz-input-container >
+          <input mz-input type="text" placeholder="Post Description" style="width: 400px" formControlName="postDescription">
+        </mz-input-container>
+
+          <mz-input-container style="margin-top: 3%">
+            <h5 style="margin-bottom: 1%">Upload GIF/Image</h5>
+            <input mz-input type="file" (change)="uploadFile($event)" accept="image/gif, image/jpeg, image/png" >
+          </mz-input-container>
+
+        <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 4%">
+          <button mz-button class="green" style="margin-left: 1%">ADD POST</button>
+        </div>
+        </form>
+      </mz-card-content>
+      <mz-card-action fxLayoutAlign="center center">
+        <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        [maintainAspectRatio]="false"
+      ></image-cropper>
+      </mz-card-action>
+
+    </mz-card>
+  </div>
+</div>

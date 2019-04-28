@@ -1,0 +1,71 @@
+<div class="container" *ngIf="post | async as post">
+  <div fxLayout="row" fxLayoutAlign="center center" >
+  <mz-card  style="width: 100%; margin-top: 3%" [@simpleFadeAnimation]>
+    <mz-card-title style="text-align: center">
+      <h4>{{post.postName}}</h4>
+      <p style="color: gray; font-size: large">{{convertDate(post.postTime)}}</p>
+      <hr>
+    </mz-card-title>
+    <mz-card-content style="text-align: center">
+      <p style="margin-top: 2%; font-size: large">{{post.postDescription}}</p>
+    </mz-card-content>
+    <mz-card-action fxLayout="column" fxLayoutAlign="center center" [@simpleFadeAnimation]>
+      <mz-spinner *ngIf="imageLoad">
+
+      </mz-spinner>
+      <img [src]="post.url"  *ngIf="post.url">
+    </mz-card-action>
+  </mz-card>
+  </div>
+</div>
+
+
+
+
+<div class="container" *ngIf="post | async as post"  style="margin-bottom: 3%">
+  <div fxLayout="row" fxLayoutAlign="center center"  >
+    <mz-card style="width: 100%" [@simpleFadeAnimation]>
+      <mz-card-content  fxLayout="row" fxLayoutAlign="space-between  center" >
+        <div fxLayout="row" fxLayoutAlign="center center">
+        <h5 class="cardTitle">COMMENTS</h5>
+        <i mz-icon [icon]="'arrow_downward'"></i>
+        </div>
+        <div>
+          <button mz-button class="blue lighten-1" (click)="createComment = true" [large]="true">ADD COMMENT</button>
+        </div>
+      </mz-card-content>
+      <mz-card-action>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" *ngIf="createComment" >
+          <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+            <mz-input-container style="width: 200px">
+              <input mz-input placeholder="Comment" formControlName="comment" required="required" size="40">
+            </mz-input-container>
+            <div fxLayoutAlign="center center">
+              <button mz-button class="red" [float]="true" (click)="createComment = false"><i mz-icon [icon]="'clear'"></i></button>
+              <button mz-button class="green" [float]="true" style="margin-left: 4px"><i mz-icon [icon]="'add'"></i></button>
+            </div>
+          </form>
+
+        </div>
+      </mz-card-action>
+    </mz-card>
+  </div>
+
+</div>
+
+
+
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="center center" *ngIf="comments">
+    <mz-card  style="width: 70%; margin-bottom: 1%" *ngFor="let comment of comments | async as Comment" [@simpleFadeAnimation] [hoverable]="true">
+      <mz-card-content>
+        <p style="color: gray; font-size: large">{{convertDate(comment.time)}}</p>
+        <p style="color: gray; font-size: large">{{convertTime(comment.time)}}</p>
+        <p style="margin-top: 2%; font-size: large">{{comment.comment}}</p>
+      </mz-card-content>
+    </mz-card>
+
+  </div>
+</div>
+
+<div style="margin-bottom: 10%"></div>

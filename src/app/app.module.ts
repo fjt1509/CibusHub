@@ -8,11 +8,14 @@ import {environment} from '../environments/environment';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import { NavbarComponent } from './navbar/navbar.component';
+import {MzNavbarModule} from 'ngx-materialize';
+import {NavbarModule} from './navbar/navbar.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +23,8 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NavbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

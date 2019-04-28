@@ -30,7 +30,7 @@ import {Location} from '@angular/common';
 describe('ForumPostListComponent', () => {
   let component: ForumPostListComponent;
   let fixture: ComponentFixture<ForumPostListComponent>;
-  const post: Post = {id: 'idTest', commentCount: 3, comments: null, pictureId: 'pictureIdTest', postDescription: 'descriptionTest', postName: 'postnameTest', postTime: new Date(), url: 'urlTest'};
+  const post: Post = {id: 'idTest', comments: null, pictureId: 'pictureIdTest', postDescription: 'descriptionTest', postName: 'postnameTest', postTime: new Date(), url: 'urlTest'};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

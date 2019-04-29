@@ -1,11 +1,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyBcJnD_JST-nWmvisRd8oHzZU_v2PbGo5Y',
-    authDomain: 'badmemesforum.firebaseapp.com',
-    databaseURL: 'https://badmemesforum.firebaseio.com',
-    projectId: 'badmemesforum',
-    storageBucket: 'badmemesforum.appspot.com',
-    messagingSenderId: '733834320432'
+    apiKey: 'AIzaSyBGC0ZbkIeEcx-l4zt2BLQVu4xVwK3zwXM',
+    authDomain: 'cibushub.firebaseapp.com',
+    databaseURL: 'https://cibushub.firebaseio.com',
+    projectId: 'cibushub',
+    storageBucket: 'cibushub.appspot.com',
+    messagingSenderId: '337517889839'
   }
 };

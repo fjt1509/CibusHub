@@ -8,5 +8,4 @@ export class Post  {
   comments?: Comment[];
   pictureId?: string;
   url?: string;
-  commentCount?: number;
 }

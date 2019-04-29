@@ -47,8 +47,6 @@ export class ForumPostAddComponent implements OnInit {
     const newPost = this.postForm.value;
     newPost.postTime = new Date();
 
-
-
     this.postService.addPostWithImage(
       newPost,
       this.getMetaDataForImage()

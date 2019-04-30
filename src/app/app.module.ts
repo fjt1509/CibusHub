@@ -11,11 +11,14 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import { NavbarComponent } from './navbar/navbar.component';
 import {MzNavbarModule} from 'ngx-materialize';
 import {NavbarModule} from './navbar/navbar.module';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import { LoginComponent } from './authentication/login/login.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -23,6 +26,7 @@ import {NavbarModule} from './navbar/navbar.module';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireAuthModule,
     BrowserAnimationsModule,
     NavbarModule
   ],

@@ -1,10 +1,21 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as deletePosts from './delete-posts-function'
+import * as Posts from './post-rest-endpoint'
+import * as uploadNewPostImage from './upload-new-product-image-function'
 
-admin.initializeApp()
-exports.posts = functions.https.onRequest((request, response) => {
-  admin.firestore().collection('post').get().then(posts => {
-    console.log(posts)
-  }).catch(err=> {console.log(err)})
 
-});
+
+
+admin.initializeApp();
+
+module.exports = {
+  ...deletePosts,
+  ...Posts,
+  ...uploadNewPostImage
+
+}
+
+
+
+
+

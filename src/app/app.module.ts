@@ -12,13 +12,11 @@ import { NavbarComponent } from './navbar/navbar.component';
 import {MzNavbarModule} from 'ngx-materialize';
 import {NavbarModule} from './navbar/navbar.module';
 import {AngularFireAuthModule} from '@angular/fire/auth';
-import { LoginComponent } from './authentication/login/login.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
   ],
   imports: [
     BrowserModule,

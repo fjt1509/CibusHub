@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MzIconModule, MzNavbarModule} from 'ngx-materialize';
+import {MzButtonModule, MzIconModule, MzNavbarModule, MzSidenavModule} from 'ngx-materialize';
 import {NavbarComponent} from './navbar.component';
 
 @NgModule({
@@ -8,7 +8,9 @@ import {NavbarComponent} from './navbar.component';
   imports: [
     CommonModule,
     MzNavbarModule,
-    MzIconModule
+    MzIconModule,
+    MzSidenavModule,
+    MzButtonModule
   ],
   exports: [
     NavbarComponent

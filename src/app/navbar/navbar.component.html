@@ -1,3 +1,4 @@
+
 <mz-navbar [navbarClass]="'green lighten-1'">
   <a href="" class="brand-logo center" style="font-family: 'Allerta Stencil', Sans-serif, serif;">CibusHub</a>
   <mz-navbar-item-container [align]="'left'">
@@ -5,9 +6,39 @@
     <mz-navbar-item><a href="/forums">The Forum</a></mz-navbar-item>
   </mz-navbar-item-container>
 
-  <mz-navbar-item-container [align]="'right'">
-    <mz-navbar-item><a (click)="login()"><i class="material-icons left">person</i>Login</a></mz-navbar-item>
-    <mz-navbar-item><a (click)="logout()">Logout</a></mz-navbar-item>
+  <mz-navbar-item-container [align]="'right'" *ngIf="!user">
+    <mz-navbar-item><a href="/login"><i class="material-icons left">person</i>Login</a></mz-navbar-item>
+  </mz-navbar-item-container>
+  <mz-navbar-item-container [align]="'right'" *ngIf="user">
+    <mz-sidenav #sidenav
+                [id]="'sidenav-demo'"
+                [collapseButtonId]="'btn-sidenav-demo'"
+                [edge]="'right'">
 
+      <mz-sidenav-header>
+        <div class="user-view">
+          <img class="circle avatar" src="{{user.photoURL}}">
+          <div class="black-text name">{{user.displayName}}</div>
+          <div class="black-text email">{{user.email}}</div>
+        </div>
+      </mz-sidenav-header>
+
+      <mz-sidenav-subheader>Your Options</mz-sidenav-subheader>
+
+      <mz-sidenav-link style="margin-top: 5%">
+        <a class="waves-effect">My Posts</a>
+      </mz-sidenav-link>
+
+      <mz-sidenav-divider></mz-sidenav-divider>
+      <mz-sidenav-link>
+        <a (click)="logout()" class="waves-effect">Logout</a>
+      </mz-sidenav-link>
+
+
+    </mz-sidenav>
+    <mz-navbar-item><a id="btn-sidenav-demo">Profile<i class="material-icons right">menu</i></a></mz-navbar-item>
   </mz-navbar-item-container>
 </mz-navbar>
+
+
+

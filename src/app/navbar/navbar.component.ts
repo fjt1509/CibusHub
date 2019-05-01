@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../authentication/shared/auth.service';
 import {User} from '../authentication/shared/user.model';
 import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -13,10 +14,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.sub = this.authService.user$.subscribe( user => {this.user = user; console.log(this.user); });
+    this.sub = this.authService.user$.subscribe( user => {this.user = user; });
   }
 
   ngOnDestroy() {
@@ -25,5 +26,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.signOut();
+  }
+
+  goToForum() {
+    this.router.navigateByUrl('/forums');
+  }
+
+  goToHome() {
+    this.router.navigateByUrl('/');
   }
 }

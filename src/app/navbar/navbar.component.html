@@ -2,8 +2,8 @@
 <mz-navbar [navbarClass]="'green lighten-1'">
   <a href="" class="brand-logo center" style="font-family: 'Allerta Stencil', Sans-serif, serif;">CibusHub</a>
   <mz-navbar-item-container [align]="'left'">
-    <mz-navbar-item><a href=""><i class="material-icons left">home</i>Home</a></mz-navbar-item>
-    <mz-navbar-item><a href="/forums">The Forum</a></mz-navbar-item>
+    <mz-navbar-item><a (click)="goToHome()"><i class="material-icons left">home</i>Home</a></mz-navbar-item>
+    <mz-navbar-item><a (click)="goToForum()">The Forum</a></mz-navbar-item>
   </mz-navbar-item-container>
 
   <mz-navbar-item-container [align]="'right'" *ngIf="!user">

@@ -14,7 +14,6 @@
         <div fxLayout="row" fxLayoutAlign="center center">
           <button mz-button class="red" [float]="true" style="margin-right: 1%" routerLink=""><i mz-icon [icon]="'home'"></i></button>
           <button mz-button class="green" [float]="true" style="margin-left: 1%" routerLink="add/post"><i mz-icon [icon]="'add'"></i></button>
-
         </div>
 
       </mz-card-action>
@@ -24,6 +23,10 @@
   <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="postList" >
     <mz-card *ngFor="let post of postList | async" style="width: 60%; cursor: pointer" [hoverable]="true" routerLink="{{post.id}}" [@simpleFadeAnimation]>
       <mz-card-title>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <img src="{{post.userDisplayUrl}}" style="width: 40px; height: 40px; border-radius: 50%">
+          <h5 style="margin-left: 2%">{{post.userDisplayName}}</h5>
+        </div>
         <h4>{{post.postName}}</h4>
         <p style="color: gray; font-size: large">{{convertDate(post.postTime)}}</p>
         <hr>

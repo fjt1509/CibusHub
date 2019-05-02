@@ -19,11 +19,13 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileMetadataModule} from '../files/file-metadata.module';
 import {ImageCropperModule} from 'ngx-image-cropper';
 import {HttpClientModule} from '@angular/common/http';
+import { ForumPostMyPostsComponent } from './forum-post-my-posts/forum-post-my-posts.component';
 
 @NgModule({
   declarations: [ForumPostDetailsComponent,
   ForumPostListComponent,
-  ForumPostAddComponent],
+  ForumPostAddComponent,
+  ForumPostMyPostsComponent],
   imports: [
     CommonModule,
     ForumPostsRoutingModule,

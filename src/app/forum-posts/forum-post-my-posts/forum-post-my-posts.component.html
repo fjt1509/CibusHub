@@ -1,0 +1,21 @@
+<div style="margin-top: 5%"></div>
+<div class="container">
+<div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="postList" >
+  <mz-card *ngFor="let post of postList | async" style="width: 60%;" [hoverable]="true"  [@simpleFadeAnimation]>
+    <mz-card-title>
+      <h4>{{post.postName}}</h4>
+      <p style="color: gray; font-size: large">{{convertDate(post.postTime)}}</p>
+      <hr>
+    </mz-card-title>
+    <mz-card-content>
+      <p style="margin-top: 2%; font-size: large">{{post.postDescription}}</p>
+    </mz-card-content>
+    <mz-card-action>
+      <div fxLayout="row" fxLayoutAlign="end center" >
+        <button mz-button class="blue" [float]="true" [large]="true"><i mz-icon [icon]="'edit'"></i></button>
+        <button mz-button class="red" [float]="true" [large]="true"><i mz-icon [icon]="'delete'" (click)="deletePost(post.id)"></i></button>
+      </div>
+    </mz-card-action>
+  </mz-card>
+</div>
+</div>

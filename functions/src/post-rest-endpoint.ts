@@ -32,6 +32,9 @@ exports.Posts = functions.https.onRequest( (request, response) => {
       postName: data.postName,
       postTime: data.postTime,
       postDescription: data.postDescription,
+      uId: data.uId,
+      userDisplayUrl: data.userDisplayUrl,
+      userDisplayName: data.userDisplayName,
     };
     const file = {
       name: data.image.name,

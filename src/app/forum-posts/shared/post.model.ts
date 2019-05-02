@@ -8,4 +8,7 @@ export class Post  {
   comments?: Comment[];
   pictureId?: string;
   url?: string;
+  uId?: string;
+  userDisplayUrl?: string;
+  userDisplayName?: string;
 }

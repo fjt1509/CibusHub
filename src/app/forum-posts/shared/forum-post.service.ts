@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentSnapshot} from '@angular/fire/firestore';
 import {promise} from 'selenium-webdriver';
 import {Post} from './post.model';
 import {from} from 'rxjs';
@@ -11,6 +11,7 @@ import {ImageMetaData} from '../../files/shared/image-metadata.model';
 import {FileService} from '../../files/shared/file.service';
 import {switchMap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -26,20 +27,6 @@ export class ForumPostService {
 
   getForumPosts(): Observable<Post[]> {
     return this.http.get<Post[]>('https://us-central1-cibushub.cloudfunctions.net/Posts');
-  /*
-    this.forumPostCollection = this.db.collection<Post>('post', ref => ref.orderBy('postTime', 'desc'));
-    return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map( actions => {
-      return actions.map( action => {
-        const data = action.payload.doc.data() as Post;
-        const id = action.payload.doc.id;
-        return{id, ...data};
-      });
-    })); */
-  }
-
-  addForumPost(post: Post): Observable<Post> {
-    this.forumPostCollection = this.db.collection<Post>('post');
-    return from( this.forumPostCollection.add(post)).pipe(map(postRef => { post.id = postRef.id; return post; }));
   }
 
 
@@ -47,9 +34,9 @@ export class ForumPostService {
     return this.db.collection<Post>('post').doc(postId).valueChanges();
   }
 
-  addComment(postId: string, comment: string, time: Date): Promise<any> {
+  addComment(postId: string, comment: Comment): Promise<any> {
     this.commentCollection = this.db.collection<Post>('post').doc(postId).collection<Comment>('comments');
-    return this.commentCollection.add({comment, time});
+    return this.commentCollection.add(comment);
   }
 
   getForumPostWithComments(id: string): Observable<any[]> {
@@ -67,6 +54,10 @@ export class ForumPostService {
         postName: post.postName,
         postTime: post.postTime,
         postDescription: post.postDescription,
+        uId: post.uId,
+        userDisplayUrl: post.userDisplayUrl,
+        userDisplayName: post.userDisplayName,
+
         image: {
           base64: imageMeta.base64Image,
           name: imageMeta.fileMeta.name,
@@ -78,13 +69,21 @@ export class ForumPostService {
       return this.http.post<Post>(endPoint, postToSend);
 
     }
-    /*
+  }
 
-    return this.fileService.uploadImage(imageMeta).pipe(switchMap( metadata => {
-      post.pictureId = metadata.id;
-      return this.addForumPost(post);
-    })); */
+  getForumPostsFromUser(userId: string): Observable<Post[]> {
+    /*return this.db.collection<Post>('post', ref => ref.where('uId', '==', userId)).valueChanges();*/
+    this.forumPostCollection = this.db.collection<Post>('post', ref => ref.where('uId', '==', userId));
+    return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map( actions => {
+      return actions.map( action => {
+        const data = action.payload.doc.data() as Post;
+        const id = action.payload.doc.id;
+        return{id, ...data};
+      });
+    }));
+  }
 
-
+  deletePost(postId: string): Promise<any> {
+    return this.db.collection<Post>('post').doc(postId).delete();
   }
 }

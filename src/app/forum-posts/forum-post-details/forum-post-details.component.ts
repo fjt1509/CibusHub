@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {ForumPostService} from '../shared/forum-post.service';
 import {Post} from '../shared/post.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {FormControl, FormGroup} from '@angular/forms';
 import {tap} from 'rxjs/operators';
 import {FileService} from '../../files/shared/file.service';
+import {User} from '../../authentication/shared/user.model';
+import {AuthService} from '../../authentication/shared/auth.service';
 
 @Component({
   selector: 'app-forum-post-details',
@@ -38,7 +40,12 @@ export class ForumPostDetailsComponent implements OnInit {
   createComment: boolean;
   imageLoad: boolean;
 
-  constructor(private router: Router, private postService: ForumPostService, private fileService: FileService) { }
+
+  currentUser: User;
+  sub: Subscription;
+
+
+  constructor(private router: Router, private postService: ForumPostService, private fileService: FileService, private authServ: AuthService) { }
 
   ngOnInit() {
     const uri = this.router.url;
@@ -54,6 +61,9 @@ export class ForumPostDetailsComponent implements OnInit {
 
 
     this.comments = this.postService.getForumPostWithComments(this.postId);
+
+    this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; console.log(this.currentUser); });
+
     this.createComment = false;
 
   }
@@ -61,9 +71,7 @@ export class ForumPostDetailsComponent implements OnInit {
   convertPostDate(postTime: any) {
     const date = new Date(postTime);
     const dateString = date.toLocaleDateString();
-
     return 'Date: ' + dateString;
-
   }
 
   convertCommentDate(postTime: any) {
@@ -85,7 +93,11 @@ export class ForumPostDetailsComponent implements OnInit {
   onSubmit() {
     const date = new Date();
     const comment = this.commentForm.value;
+    comment.uId = this.currentUser.uid;
+    comment.userDisplayUrl = this.currentUser.photoURL;
+    comment.userDisplayName = this.currentUser.displayName;
+    comment.time = date;
 
-    this.postService.addComment(this.postId, comment.comment, date).then( () => {this.createComment = false; this.commentForm.reset(); });
+    this.postService.addComment(this.postId, comment).then( () => {this.createComment = false; this.commentForm.reset(); });
   }
 }

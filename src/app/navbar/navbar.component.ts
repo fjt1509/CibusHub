@@ -35,4 +35,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   goToHome() {
     this.router.navigateByUrl('/');
   }
+
+  goToMyPosts() {
+    this.router.navigateByUrl('/forums/user/myPosts');
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ForumPostService} from '../shared/forum-post.service';
@@ -7,6 +7,10 @@ import {switchMap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ImageCroppedEvent} from 'ngx-image-cropper';
 import {ImageMetaData} from '../../files/shared/image-metadata.model';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from '../../authentication/shared/auth.service';
+import {Subscription} from 'rxjs';
+import {User} from '../../authentication/shared/user.model';
 
 @Component({
   selector: 'app-forum-post-add',
@@ -27,7 +31,7 @@ import {ImageMetaData} from '../../files/shared/image-metadata.model';
     ])
   ]
 })
-export class ForumPostAddComponent implements OnInit {
+export class ForumPostAddComponent implements OnInit, OnDestroy {
 
   postForm = new FormGroup( {
     postName: new FormControl(''),
@@ -38,14 +42,23 @@ export class ForumPostAddComponent implements OnInit {
   croppedImage: any = '';
   croppedBlob: Blob;
 
-  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private activatedRoute: ActivatedRoute ) { }
+  currentUser: User;
+  sub: Subscription;
+
+  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService) { }
 
   ngOnInit() {
+  this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; console.log(this.currentUser); });
+
   }
 
   onSubmit() {
     const newPost = this.postForm.value;
     newPost.postTime = new Date();
+    newPost.uId = this.currentUser.uid;
+    newPost.userDisplayUrl = this.currentUser.photoURL;
+    newPost.userDisplayName = this.currentUser.displayName;
+
 
     this.postService.addPostWithImage(
       newPost,
@@ -78,8 +91,11 @@ export class ForumPostAddComponent implements OnInit {
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    // Preview
     this.croppedImage = event.base64;
     this.croppedBlob = event.file;
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }

@@ -4,11 +4,13 @@ import {ForumPostListComponent} from './forum-post-list/forum-post-list.componen
 import {ForumPostDetailsComponent} from './forum-post-details/forum-post-details.component';
 import {ForumPostAddComponent} from './forum-post-add/forum-post-add.component';
 import {AuthGuard} from '../authentication/guard/auth.guard';
+import {ForumPostMyPostsComponent} from './forum-post-my-posts/forum-post-my-posts.component';
 
 const routes: Routes = [
   {path: '', component: ForumPostListComponent, children: [], canActivate: [AuthGuard]},
   {path: 'add/post', component: ForumPostAddComponent, canActivate: [AuthGuard]},
-  {path: ':id', component: ForumPostDetailsComponent, canActivate: [AuthGuard]}
+  {path: ':id', component: ForumPostDetailsComponent, canActivate: [AuthGuard]},
+  {path: 'user/myPosts', component: ForumPostMyPostsComponent, canActivate: [AuthGuard]}
 
 ];
 

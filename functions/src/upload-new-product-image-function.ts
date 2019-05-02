@@ -4,7 +4,9 @@ import * as admin from 'firebase-admin';
 exports.uploadNewPostImage = functions.storage.object().onFinalize((object)=>{
 
   return new Promise((resolve, reject) => {
-    if(object && object.metadata && object.name)
+    console.log(object.metadata);
+    console.log(object.name);
+    if(object.metadata && object.name)
     {
       const fileMeta = {
         lastModified: object.updated,
@@ -12,7 +14,6 @@ exports.uploadNewPostImage = functions.storage.object().onFinalize((object)=>{
         type: 'image/png',
         size: object.size
       };
-      console.log(fileMeta);
       const nameForDoc = object.name.split('/')[1];
       admin.firestore().collection('files')
         .doc(nameForDoc)

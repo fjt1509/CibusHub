@@ -4,6 +4,7 @@ import * as corsModule from 'cors';
 
 const cors = corsModule({origin:true})
 
+
 exports.Posts = functions.https.onRequest( (request, response) => {
   cors(request, response, async () => {
   if (request.method === 'GET') {

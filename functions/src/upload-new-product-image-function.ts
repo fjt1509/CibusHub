@@ -12,6 +12,7 @@ exports.uploadNewPostImage = functions.storage.object().onFinalize((object)=>{
         type: 'image/png',
         size: object.size
       };
+      console.log(fileMeta);
       const nameForDoc = object.name.split('/')[1];
       admin.firestore().collection('files')
         .doc(nameForDoc)

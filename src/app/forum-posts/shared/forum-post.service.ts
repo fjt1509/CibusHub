@@ -64,9 +64,9 @@ export class ForumPostService {
 
       const endPoint = 'https://us-central1-cibushub.cloudfunctions.net/Posts';
       const postToSend: any = {
-        name: post.postName,
-        time: post.postTime,
-        description: post.postDescription,
+        postName: post.postName,
+        postTime: post.postTime,
+        postDescription: post.postDescription,
         image: {
           base64: imageMeta.base64Image,
           name: imageMeta.fileMeta.name,

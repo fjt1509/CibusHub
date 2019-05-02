@@ -25,7 +25,7 @@
     <mz-card *ngFor="let post of postList | async" style="width: 60%; cursor: pointer" [hoverable]="true" routerLink="{{post.id}}" [@simpleFadeAnimation]>
       <mz-card-title>
         <h4>{{post.postName}}</h4>
-        <p style="color: gray; font-size: large">{{convertTime(post.postTime)}}</p>
+        <p style="color: gray; font-size: large">{{convertDate(post.postTime)}}</p>
         <hr>
       </mz-card-title>
       <mz-card-content>

@@ -7,16 +7,17 @@ const cors = corsModule({origin:true})
 exports.Posts = functions.https.onRequest( (request, response) => {
   cors(request, response, async () => {
   if (request.method === 'GET') {
-  admin.firestore().collection('post')
-    .get()
-    .then(posts => {
-    const listOfPosts: any = [];
-    posts.forEach(post => {
-      let aPost = post.data();
-      aPost.id = post.id;
-      listOfPosts.push(aPost);
+    admin.firestore().collection('post').get().then(posts => {
 
+      const listOfPosts: any = [];
+
+      posts.forEach(post => {
+
+        let aPost = post.data();
+        aPost.id = post.id;
+        listOfPosts.push(aPost);
     });
+
     console.log(listOfPosts);
     response.json(listOfPosts)
   }).catch(e=> {console.log(e)})
@@ -26,15 +27,20 @@ exports.Posts = functions.https.onRequest( (request, response) => {
     console.log('1');
     const data = request.body;
 
-    const post: any = {name: data.name};
+    const post: any = {
+      postName: data.postName,
+      postTime: data.postTime,
+      postDescription: data.postDescription,
+    };
     const file = {
-      name: data.name,
-      type: data.type,
-      size: data.size
+      name: data.image.name,
+      type: data.image.type,
+      size: data.image.size
     };
     console.log('2')
     try {
-      console.log('2.1')
+      console.log('2.1');
+      console.log(file);
       const value = await admin.firestore().collection('files').add(file).then();
       console.log('3');
         //Encode base64 and save it to Storage

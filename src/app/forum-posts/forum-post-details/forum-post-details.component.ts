@@ -58,7 +58,15 @@ export class ForumPostDetailsComponent implements OnInit {
 
   }
 
-  convertDate(postTime: any) {
+  convertPostDate(postTime: any) {
+    const date = new Date(postTime);
+    const dateString = date.toLocaleDateString();
+
+    return 'Date: ' + dateString;
+
+  }
+
+  convertCommentDate(postTime: any) {
     const date = postTime.toDate();
     const dateString = date.toLocaleDateString();
 

@@ -3,7 +3,7 @@
   <mz-card  style="width: 100%; margin-top: 3%" [@simpleFadeAnimation]>
     <mz-card-title style="text-align: center">
       <h4>{{post.postName}}</h4>
-      <p style="color: gray; font-size: large">{{convertDate(post.postTime)}}</p>
+      <p style="color: gray; font-size: large">{{convertPostDate(post.postTime)}}</p>
       <hr>
     </mz-card-title>
     <mz-card-content style="text-align: center">
@@ -59,7 +59,7 @@
   <div fxLayout="column" fxLayoutAlign="center center" *ngIf="comments">
     <mz-card  style="width: 70%; margin-bottom: 1%" *ngFor="let comment of comments | async as Comment" [@simpleFadeAnimation] [hoverable]="true">
       <mz-card-content>
-        <p style="color: gray; font-size: large">{{convertDate(comment.time)}}</p>
+        <p style="color: gray; font-size: large">{{convertCommentDate(comment.time)}}</p>
         <p style="color: gray; font-size: large">{{convertTime(comment.time)}}</p>
         <p style="margin-top: 2%; font-size: large">{{comment.comment}}</p>
       </mz-card-content>

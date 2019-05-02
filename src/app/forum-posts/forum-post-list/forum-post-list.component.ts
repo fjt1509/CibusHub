@@ -33,7 +33,7 @@ export class ForumPostListComponent implements OnInit {
     this.postList = this.postService.getForumPosts();
   }
 
-  convertTime(postTime: any) {
+  convertDate(postTime: any) {
       const date = new Date(postTime);
       const dateString = date.toLocaleDateString();
 

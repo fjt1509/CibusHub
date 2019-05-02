@@ -18,6 +18,7 @@ import { ForumPostAddComponent } from './forum-post-add/forum-post-add.component
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileMetadataModule} from '../files/file-metadata.module';
 import {ImageCropperModule} from 'ngx-image-cropper';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [ForumPostDetailsComponent,
@@ -37,8 +38,7 @@ import {ImageCropperModule} from 'ngx-image-cropper';
     MzSpinnerModule,
     FileMetadataModule,
     ImageCropperModule,
-    MzProgressModule
-
+    MzProgressModule,
   ]
 })
 export class ForumPostsModule { }

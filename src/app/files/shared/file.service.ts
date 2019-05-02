@@ -14,7 +14,7 @@ export class FileService {
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
 
 
-
+/*
   uploadImage(imageMetadata: ImageMetaData): Observable<FileMetadata> {
     if (imageMetadata.imageBlob) {
       const fileToUpload = new File(
@@ -23,7 +23,7 @@ export class FileService {
         , {type: imageMetadata.fileMeta.type});
       return this.upload(fileToUpload);
     }
-  }
+  }*/
 
   upload(file: File): Observable<FileMetadata> {
     const uid = this.db.createId();

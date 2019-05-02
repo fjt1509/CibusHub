@@ -10,6 +10,7 @@ import {Comment} from './comment.model';
 import {ImageMetaData} from '../../files/shared/image-metadata.model';
 import {FileService} from '../../files/shared/file.service';
 import {switchMap} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +21,12 @@ export class ForumPostService {
   commentCollection: AngularFirestoreCollection<Comment>;
   forumPosts: Observable<Post[]>;
 
-  constructor(private db: AngularFirestore, private fileService: FileService) { }
+  constructor(private db: AngularFirestore, private fileService: FileService, private http: HttpClient) { }
 
 
   getForumPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>('https://us-central1-cibushub.cloudfunctions.net/Posts');
+  /*
     this.forumPostCollection = this.db.collection<Post>('post', ref => ref.orderBy('postTime', 'desc'));
     return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map( actions => {
       return actions.map( action => {
@@ -31,8 +34,7 @@ export class ForumPostService {
         const id = action.payload.doc.id;
         return{id, ...data};
       });
-    }));
-
+    })); */
   }
 
   addForumPost(post: Post): Observable<Post> {
@@ -59,11 +61,30 @@ export class ForumPostService {
     if (imageMeta && imageMeta.fileMeta
       && imageMeta.fileMeta.name && imageMeta.fileMeta.type &&
       (imageMeta.imageBlob || imageMeta.base64Image)) {
-      return this.fileService.uploadImage(imageMeta).pipe(switchMap( metadata => {
-        post.pictureId = metadata.id;
-        return this.addForumPost(post);
-      }));
+
+      const endPoint = 'https://us-central1-cibushub.cloudfunctions.net/Posts';
+      const postToSend: any = {
+        name: post.postName,
+        time: post.postTime,
+        description: post.postDescription,
+        image: {
+          base64: imageMeta.base64Image,
+          name: imageMeta.fileMeta.name,
+          type: imageMeta.fileMeta.type,
+          size: imageMeta.fileMeta.size
+        }
+      };
+      console.log(postToSend);
+      return this.http.post<Post>(endPoint, postToSend);
+
     }
+    /*
+
+    return this.fileService.uploadImage(imageMeta).pipe(switchMap( metadata => {
+      post.pictureId = metadata.id;
+      return this.addForumPost(post);
+    })); */
+
 
   }
 }

@@ -12,6 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import {MzNavbarModule} from 'ngx-materialize';
 import {NavbarModule} from './navbar/navbar.module';
 import {AngularFireAuthModule} from '@angular/fire/auth';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -26,8 +27,9 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
     AngularFireStorageModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,
-    NavbarModule
-  ],
+    NavbarModule,
+    HttpClientModule
+],
   providers: [],
   bootstrap: [AppComponent]
 })

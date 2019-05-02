@@ -15,12 +15,15 @@ exports.Posts = functions.https.onRequest( (request, response) => {
       let aPost = post.data();
       aPost.id = post.id;
       listOfPosts.push(aPost);
-    })
+
+    });
+    console.log(listOfPosts);
     response.json(listOfPosts)
   }).catch(e=> {console.log(e)})
 }
 
   else if (request.method === 'POST'){
+    console.log('1');
     const data = request.body;
 
     const post: any = {name: data.name};
@@ -29,13 +32,16 @@ exports.Posts = functions.https.onRequest( (request, response) => {
       type: data.type,
       size: data.size
     };
+    console.log('2')
     try {
-      const value = await admin.firestore().collection('files')
-        .add(file)
-        .then();
+      console.log('2.1')
+      const value = await admin.firestore().collection('files').add(file).then();
+      console.log('3');
         //Encode base64 and save it to Storage
       const base64EncodedImageString = data.image.base64.replace(/^data:image\/\w+;base64,/, '');
       const imageBuffer = new Buffer(base64EncodedImageString, 'base64');
+
+      console.log('4')
       await admin.storage().bucket().file('post-pictures/' + value.id)
         .save(imageBuffer, {
           gzip: true,
@@ -43,12 +49,16 @@ exports.Posts = functions.https.onRequest( (request, response) => {
             contentType: file.type
           }
         }).then();
+
+      console.log('5')
       //Saves the Post metadata to firestore
       post.pictureId = value.id;
       const aPost = await admin.firestore().collection('post')
         .add(post)
         .then();
+      console.log('6')
       post.id = aPost.id;
+      console.log(post);
       response.json(post);
     } catch (err) {
       response.send(err)

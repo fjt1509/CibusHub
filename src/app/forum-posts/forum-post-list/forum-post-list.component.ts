@@ -34,7 +34,7 @@ export class ForumPostListComponent implements OnInit {
   }
 
   convertTime(postTime: any) {
-      const date = postTime.toDate();
+      const date = new Date(postTime);
       const dateString = date.toLocaleDateString();
 
       return 'Date: ' + dateString;

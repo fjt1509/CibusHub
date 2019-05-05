@@ -4,8 +4,7 @@ import * as admin from 'firebase-admin';
 exports.uploadNewPostImage = functions.storage.object().onFinalize((object)=>{
 
   return new Promise((resolve, reject) => {
-    console.log(object.metadata);
-    console.log(object.name);
+
     if(object.metadata && object.name)
     {
       const fileMeta = {

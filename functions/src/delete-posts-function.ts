@@ -6,6 +6,9 @@ exports.deletePost = functions.firestore.document('post/{postID}').onDelete((sna
     const deletedPost = snap.data();
     try {
       if (deletedPost) {
+        await admin.firestore().collection('post').doc(deletedPost.id).collection('comments').get().then( snapQue => snapQue.forEach(doc => doc.ref.delete()))
+
+
         await admin.firestore().collection('files')
           .doc(deletedPost.pictureId)
           .delete()

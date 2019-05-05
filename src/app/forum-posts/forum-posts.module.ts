@@ -12,7 +12,7 @@ import {
   MzIconModule,
   MzInputModule,
   MzProgressModule,
-  MzSpinnerModule
+  MzSpinnerModule, MzToastModule
 } from 'ngx-materialize';
 import { ForumPostAddComponent } from './forum-post-add/forum-post-add.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -20,12 +20,14 @@ import {FileMetadataModule} from '../files/file-metadata.module';
 import {ImageCropperModule} from 'ngx-image-cropper';
 import {HttpClientModule} from '@angular/common/http';
 import { ForumPostMyPostsComponent } from './forum-post-my-posts/forum-post-my-posts.component';
+import { ForumPostUpdateComponent } from './forum-post-update/forum-post-update.component';
 
 @NgModule({
   declarations: [ForumPostDetailsComponent,
   ForumPostListComponent,
   ForumPostAddComponent,
-  ForumPostMyPostsComponent],
+  ForumPostMyPostsComponent,
+  ForumPostUpdateComponent],
   imports: [
     CommonModule,
     ForumPostsRoutingModule,
@@ -41,6 +43,7 @@ import { ForumPostMyPostsComponent } from './forum-post-my-posts/forum-post-my-p
     FileMetadataModule,
     ImageCropperModule,
     MzProgressModule,
+    MzToastModule
   ]
 })
 export class ForumPostsModule { }

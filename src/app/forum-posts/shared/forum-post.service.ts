@@ -65,14 +65,12 @@ export class ForumPostService {
           size: imageMeta.fileMeta.size
         }
       };
-      console.log(postToSend);
       return this.http.post<Post>(endPoint, postToSend);
 
     }
   }
 
   getForumPostsFromUser(userId: string): Observable<Post[]> {
-    /*return this.db.collection<Post>('post', ref => ref.where('uId', '==', userId)).valueChanges();*/
     this.forumPostCollection = this.db.collection<Post>('post', ref => ref.where('uId', '==', userId));
     return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map( actions => {
       return actions.map( action => {
@@ -85,5 +83,39 @@ export class ForumPostService {
 
   deletePost(postId: string): Promise<any> {
     return this.db.collection<Post>('post').doc(postId).delete();
+  }
+
+  updatePostNoNewImage(post: Post): Promise<any> {
+    return this.db.collection<Post>('post').doc(post.id).set(post, {merge: true});
+  }
+
+
+  updatePostWithNewImage(post: Post, imageMeta: ImageMetaData) {
+    if (imageMeta && imageMeta.fileMeta
+      && imageMeta.fileMeta.name && imageMeta.fileMeta.type &&
+      (imageMeta.imageBlob || imageMeta.base64Image)) {
+
+      const endPoint = 'https://us-central1-cibushub.cloudfunctions.net/Posts';
+      const postToSend: any = {
+        id: post.id,
+        pictureId: post.pictureId,
+        url: post.url,
+        postName: post.postName,
+        postTime: post.postTime,
+        postDescription: post.postDescription,
+        uId: post.uId,
+        userDisplayUrl: post.userDisplayUrl,
+        userDisplayName: post.userDisplayName,
+
+        image: {
+          base64: imageMeta.base64Image,
+          name: imageMeta.fileMeta.name,
+          type: imageMeta.fileMeta.type,
+          size: imageMeta.fileMeta.size
+        }
+      };
+      return this.http.put<Post>(endPoint, postToSend);
+    }
+
   }
 }

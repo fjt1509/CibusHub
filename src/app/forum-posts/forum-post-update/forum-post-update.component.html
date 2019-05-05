@@ -1,0 +1,45 @@
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="center center" [@simpleFadeAnimation]>
+    <mz-card style="width: 100%; margin-top: 3%" *ngIf="post | async as post"
+             [hoverable]="true">
+      <mz-card-title style="text-align: center; margin-top: 3%">
+        <h1 class="cardTitle">Update Post</h1>
+        <hr style=" margin-top: 1%">
+      </mz-card-title>
+
+      <mz-card-content style="text-align: center">
+
+
+          <mz-input-container >
+            <input mz-input type="text" [(ngModel)]="post.postName"  style="width: 400px; margin-top: 3%" >
+          </mz-input-container>
+          <mz-input-container >
+            <input mz-input type="text" [(ngModel)]="post.postDescription" style="width: 400px" >
+          </mz-input-container>
+
+          <mz-input-container style="margin-top: 3%">
+            <h5 style="margin-bottom: 1%">Upload png image</h5>
+            <input mz-input type="file" (change)="uploadFile($event)" accept="image/png" >
+          </mz-input-container>
+
+          <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 4%">
+            <button  (click)="resetImage()" *ngIf="newImageSelected" mz-button class="red" [float]="true"><i mz-icon [icon]="'keyboard_arrow_left'"></i></button>
+            <button (click)="updateImage(post)" mz-button class="green" style="margin-left: 1%">UPDATE POST</button>
+          </div>
+      </mz-card-content>
+      <mz-card-action fxLayout="column" fxLayoutAlign="center center">
+        <mz-spinner *ngIf="imageLoad">
+
+        </mz-spinner>
+        <img [src]="post.url"  *ngIf="post.url && !newImageSelected">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          [maintainAspectRatio]="false"
+        ></image-cropper>
+      </mz-card-action>
+
+    </mz-card>
+  </div>
+</div>

@@ -56,13 +56,12 @@ export class ForumPostDetailsComponent implements OnInit {
         this.imageLoad = true;
         this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; });
       }
-      console.log(postRef);
     }));
 
 
     this.comments = this.postService.getForumPostWithComments(this.postId);
 
-    this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; console.log(this.currentUser); });
+    this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
 
     this.createComment = false;
 
@@ -77,7 +76,6 @@ export class ForumPostDetailsComponent implements OnInit {
   convertCommentDate(postTime: any) {
     const date = postTime.toDate();
     const dateString = date.toLocaleDateString();
-
     return 'Date: ' + dateString;
 
   }

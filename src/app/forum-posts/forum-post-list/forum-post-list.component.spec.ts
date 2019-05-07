@@ -25,6 +25,10 @@ import {Post} from '../shared/post.model';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Location} from '@angular/common';
+import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
+import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 
 describe('ForumPostListComponent', () => {
@@ -60,8 +64,10 @@ describe('ForumPostListComponent', () => {
         )
 
       ],
-      declarations: [ ForumPostListComponent, ForumPostAddComponent, ForumPostDetailsComponent ],
-      providers: [{provide: ForumPostService, useClass: ForumPostServiceStub}]
+      declarations: [ ForumPostListComponent, ForumPostAddComponent, ForumPostDetailsComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent ],
+      providers: [{provide: ForumPostService, useClass: ForumPostServiceStub},
+        {provide: AngularFireAuth, useClass: AngularAuthStub},
+        {provide: AngularFirestore, useClass: AngularFireStub}]
     })
     .compileComponents();
   }));
@@ -127,7 +133,12 @@ class ForumPostServiceStub {
   getForumPosts(): Observable<Post[]> {
     return of([]);
   }}
+class AngularAuthStub {
 
+}
+class AngularFireStub{
+
+}
 class DummyComponent {
 
 }

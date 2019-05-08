@@ -7,7 +7,7 @@ import {User} from '../../authentication/shared/user.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Router} from '@angular/router';
 import {Store} from '@ngxs/store';
-import {DeletePost} from '../store/post.action';
+import {DeletePost, SetSelectedPost} from '../store/post.action';
 
 @Component({
   selector: 'app-forum-post-my-posts',
@@ -55,11 +55,17 @@ export class ForumPostMyPostsComponent implements OnInit, OnDestroy {
     const dateString = date.toLocaleDateString();
 
     return 'Date: ' + dateString;
-
   }
 
 
   deletePost(id: string) {
     this.store.dispatch(new DeletePost(id));
+  }
+
+  goToUpdate(post: Post) {
+    if (post.id) {
+      this.store.dispatch(new SetSelectedPost(post));
+      this.router.navigateByUrl('/forums/user/update');
+    }
   }
 }

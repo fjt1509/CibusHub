@@ -7,6 +7,7 @@ exports.uploadNewPostImage = functions.storage.object().onFinalize((object)=>{
 
     if(object.metadata && object.name)
     {
+      console.log(object);
       const fileMeta = {
         lastModified: object.updated,
         name: object.metadata.originalName,

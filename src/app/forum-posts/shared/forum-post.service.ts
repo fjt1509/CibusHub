@@ -26,7 +26,6 @@ export class ForumPostService {
 
 
   getForumPosts(): Observable<Post[]> {
-    console.log('test')
     return this.http.get<Post[]>('https://us-central1-cibushub.cloudfunctions.net/Posts');
   }
 
@@ -83,6 +82,7 @@ export class ForumPostService {
   }
 
   deletePost(postId: string): Promise<any> {
+    console.log(postId);
     return this.db.collection<Post>('post').doc(postId).delete();
   }
 

@@ -13,7 +13,7 @@ export class PostStateModel {
   name: 'posts',
   defaults: {
     posts: [],
-    selectedPost: null
+    selectedPost: null,
   }
 })
 
@@ -31,9 +31,10 @@ export class PostState {
     return state.selectedPost;
   }
 
+
+
   @Action(GetPosts)
   getPosts({getState, setState}: StateContext<PostStateModel>) {
-    console.log('test');
     return this.postServ.getForumPosts().pipe(tap((result) => {
       const state = getState();
       setState({...state, posts: result});
@@ -82,6 +83,7 @@ export class PostState {
   @Action(SetSelectedPost)
   setSelectedPost({getState, setState}: StateContext<PostStateModel>, {payload}: SetSelectedPost) {
     const state = getState();
+    console.log(payload);
     setState({...state, selectedPost: payload});
   }
 

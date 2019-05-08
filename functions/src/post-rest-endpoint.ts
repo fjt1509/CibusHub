@@ -9,11 +9,8 @@ exports.Posts = functions.https.onRequest( (request, response) => {
   cors(request, response, async () => {
   if (request.method === 'GET') {
     admin.firestore().collection('post').get().then(posts => {
-
       const listOfPosts: any = [];
-
       posts.forEach(post => {
-
         let aPost = post.data();
         aPost.id = post.id;
         listOfPosts.push(aPost);
@@ -58,7 +55,6 @@ exports.Posts = functions.https.onRequest( (request, response) => {
         .add(post)
         .then();
       post.id = aPost.id;
-      console.log(post);
       response.json(post);
     } catch (err) {
       response.send(err)

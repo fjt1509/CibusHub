@@ -23,7 +23,9 @@
           </mz-input-container>
 
         <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 4%">
-          <button mz-button class="green" style="margin-left: 1%">ADD POST</button>
+          <button mz-button class="green" style="margin-left: 1%" *ngIf="!loading">ADD POST</button>
+          <mz-spinner [color]="'blue'" [size]="'small'" *ngIf="loading">
+          </mz-spinner>
         </div>
         </form>
       </mz-card-content>

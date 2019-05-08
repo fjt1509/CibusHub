@@ -40,7 +40,7 @@ export class ForumPostDetailsComponent implements OnInit {
   createComment: boolean;
   imageLoad: boolean;
 
-
+  errorMessage: string;
   currentUser: User;
   sub: Subscription;
 
@@ -54,7 +54,7 @@ export class ForumPostDetailsComponent implements OnInit {
     this.post = this.postService.getForumPostById(this.postId).pipe(tap(postRef => {
       if (postRef.pictureId) {
         this.imageLoad = true;
-        this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; });
+        this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; }, error1 => this.errorMessage = error1 );
       }
     }));
 

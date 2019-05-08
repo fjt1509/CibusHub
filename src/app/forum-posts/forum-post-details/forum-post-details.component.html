@@ -13,11 +13,14 @@
     <mz-card-content style="text-align: center">
       <p style="margin-top: 2%; font-size: large">{{post.postDescription}}</p>
     </mz-card-content>
-    <mz-card-action fxLayout="column" fxLayoutAlign="center center" [@simpleFadeAnimation]>
+    <mz-card-action fxLayout="column" fxLayoutAlign="center center" [@simpleFadeAnimation] *ngIf="!errorMessage">
       <mz-spinner *ngIf="imageLoad">
 
       </mz-spinner>
       <img [src]="post.url"  *ngIf="post.url">
+    </mz-card-action>
+    <mz-card-action *ngIf="errorMessage" style="text-align: center">
+      <h5>{{errorMessage}}</h5>
     </mz-card-action>
   </mz-card>
   </div>

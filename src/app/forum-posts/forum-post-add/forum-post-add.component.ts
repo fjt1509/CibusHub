@@ -67,7 +67,7 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
       this.store.dispatch(new AddPost(newPost, this.getMetaDataForImage())).subscribe(() => {
         this.loading = false;
         this.router.navigateByUrl('/forums');
-      });
+      }, error1 => this.showToast(error1.message));
     } else {
       this.showToast('Please Enter a post name and description');
     }

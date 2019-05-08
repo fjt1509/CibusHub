@@ -30,9 +30,15 @@ export class ForumPostListComponent implements OnInit {
 
   @Select(PostState.getPostList) posts: Observable<Post[]>;
 
+  loading: boolean;
   constructor(private store: Store) { }
 
   ngOnInit() {
+    if (!this.posts) {
+      this.loading = true;
+    } else {
+      this.loading = false;
+    }
     this.store.dispatch(new GetPosts());
   }
 

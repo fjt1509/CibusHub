@@ -20,7 +20,7 @@
     </mz-card>
   </div>
 
-  <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="posts" >
+  <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="!loading" >
     <mz-card *ngFor="let post of posts | async" style="width: 60%; cursor: pointer" [hoverable]="true" routerLink="{{post.id}}" [@simpleFadeAnimation]>
       <mz-card-title>
         <div fxLayout="row" fxLayoutAlign="start center">
@@ -35,6 +35,10 @@
         <p style="margin-top: 2%; font-size: large">{{post.postDescription}}</p>
       </mz-card-content>
     </mz-card>
+  </div>
+
+  <div *ngIf="loading">
+    <mz-spinner [color]="'green'" [size]="'big'"></mz-spinner>
   </div>
 
 

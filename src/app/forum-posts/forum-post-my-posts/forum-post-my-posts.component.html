@@ -12,7 +12,7 @@
     </mz-card-content>
     <mz-card-action>
       <div fxLayout="row" fxLayoutAlign="end center" >
-        <button mz-button class="blue" [float]="true" [large]="true" routerLink="../../update/{{post.id}}"><i mz-icon [icon]="'edit'"></i></button>
+        <button mz-button class="blue" [float]="true" [large]="true" (click)="goToUpdate(post)"><i mz-icon [icon]="'edit'"></i></button>
         <button mz-button class="red" [float]="true" [large]="true"><i mz-icon [icon]="'delete'" (click)="deletePost(post.id)"></i></button>
       </div>
     </mz-card-action>

@@ -20,8 +20,8 @@
     </mz-card>
   </div>
 
-  <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="postList" >
-    <mz-card *ngFor="let post of postList | async" style="width: 60%; cursor: pointer" [hoverable]="true" routerLink="{{post.id}}" [@simpleFadeAnimation]>
+  <div fxLayout="column" fxLayoutAlign="space-around center" *ngIf="posts" >
+    <mz-card *ngFor="let post of posts | async" style="width: 60%; cursor: pointer" [hoverable]="true" routerLink="{{post.id}}" [@simpleFadeAnimation]>
       <mz-card-title>
         <div fxLayout="row" fxLayoutAlign="start center">
           <img src="{{post.userDisplayUrl}}" style="width: 40px; height: 40px; border-radius: 50%">

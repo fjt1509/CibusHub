@@ -12,6 +12,9 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {tap} from 'rxjs/operators';
 import {Post} from '../shared/post.model';
 import {MzToastService} from 'ngx-materialize';
+import {Select, Store} from '@ngxs/store';
+import {SetSelectedPost, UpdatePost, UpdatePostIncPic} from '../store/post.action';
+import {PostState} from '../store/post.state';
 
 @Component({
   selector: 'app-forum-post-update',
@@ -35,6 +38,9 @@ import {MzToastService} from 'ngx-materialize';
 export class ForumPostUpdateComponent implements OnInit, OnDestroy {
 
 
+  post: Observable<Post>;
+
+
   imageChangedEvent: any = '';
   croppedImage: any = '';
   croppedBlob: Blob;
@@ -42,47 +48,36 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
   currentUser: User;
   sub: Subscription;
 
-  postId: string;
-  post: Observable<any>;
   newImageSelected: boolean;
   imageLoad: boolean;
 
-  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService) { }
+  loading: boolean;
+  constructor(private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService, private store: Store) {
+  }
 
   ngOnInit() {
     this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
-    this.getPostById();
-
-  }
-
-
-  getPostById() {
-    const uri = this.router.url;
-    this.postId = uri.substr(uri.lastIndexOf('/') + 1);
-
-    this.post = this.postService.getForumPostById(this.postId).pipe(tap(postRef => {
-      if (postRef.pictureId) {
+    this.post = this.store.select( PostState.getSelectedPost).pipe(tap(postRef => {
+      if (postRef) {
         this.imageLoad = true;
         this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; });
+      }
+      else {
+        this.router.navigateByUrl('/forums');
       }
     }));
   }
 
 
   updateImage(postInfo: Post) {
-    postInfo.id = this.postId;
+    console.log(postInfo);
     if (this.imageChangedEvent) {
-      this.postService.updatePostWithNewImage(postInfo, this.getMetaDataForImage()).subscribe(() => this.router.navigateByUrl(''), error1 => this.showToast('Failed to update the Post'));
+      this.loading = true;
+      this.store.dispatch(new UpdatePostIncPic(postInfo, this.getMetaDataForImage())).subscribe(() => this.router.navigateByUrl(''), error1 => {this.showToast('Failed to update the Post'); this.loading = false; });
     } else {
-      this.postService.updatePostNoNewImage(postInfo).then( succ => this.router.navigateByUrl('')).catch( err => this.showToast('Failed to update the Post' ));
+      this.loading = true;
+      this.store.dispatch(new UpdatePost(postInfo)).subscribe(() => this.router.navigateByUrl(''), error1 => {this.showToast('Failed to update the Post'); this.loading = false; });
     }
-
-
-
-    /*
-    this.postService.addPostWithImage(null, this.getMetaDataForImage()).subscribe(postImage => {
-      this.router.navigateByUrl('/forums');
-    }); */
   }
 
 
@@ -116,6 +111,7 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    this.store.dispatch(new SetSelectedPost(null));
   }
 
   resetImage() {

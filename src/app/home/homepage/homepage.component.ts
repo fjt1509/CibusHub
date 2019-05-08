@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Store} from '@ngxs/store';
+import {GetPosts} from '../../forum-posts/store/post.action';
 
 @Component({
   selector: 'app-homepage',

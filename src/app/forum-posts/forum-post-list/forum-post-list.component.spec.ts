@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ForumPostListComponent } from './forum-post-list.component';
 import {CommonModule} from '@angular/common';
 import {ForumPostsRoutingModule} from '../forum-posts-routing.module';
@@ -27,11 +26,12 @@ import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-po
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
 import {By} from '@angular/platform-browser';
 import {Location} from '@angular/common';
-import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireModule} from '@angular/fire';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
-import {AuthService} from '../../authentication/shared/auth.service';
+import {AngularFirestore} from '@angular/fire/firestore';
+
 
 
 describe('ForumPostListComponent', () => {
@@ -85,7 +85,10 @@ describe('ForumPostListComponent', () => {
         ForumPostDetailsComponent,
         ForumPostMyPostsComponent,
         ForumPostUpdateComponent ],
-      providers: [{provide: ForumPostService, useClass: ForumPostServiceStub}]
+      providers: [{provide: ForumPostService, useClass: ForumPostServiceStub},
+        {provide: AngularFireAuth, useClass: AngularAuthStub},
+        {provide: AngularFirestore, useClass: AngularFireStub}]
+
     })
     .compileComponents();
   }));
@@ -144,7 +147,12 @@ class ForumPostServiceStub {
   getForumPosts(): Observable<Post[]> {
     return of([]);
   }}
+class AngularAuthStub {
 
+}
+class AngularFireStub {
+
+}
 class DummyComponent {
 
 }

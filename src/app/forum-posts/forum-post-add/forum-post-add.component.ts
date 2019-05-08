@@ -11,6 +11,9 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../../authentication/shared/auth.service';
 import {Subscription} from 'rxjs';
 import {User} from '../../authentication/shared/user.model';
+import {Store} from '@ngxs/store';
+import {AddPost} from '../store/post.action';
+import {MzToastService} from 'ngx-materialize';
 
 @Component({
   selector: 'app-forum-post-add',
@@ -33,6 +36,8 @@ import {User} from '../../authentication/shared/user.model';
 })
 export class ForumPostAddComponent implements OnInit, OnDestroy {
 
+  loading: boolean;
+
   postForm = new FormGroup( {
     postName: new FormControl(''),
     postDescription: new FormControl('')
@@ -41,11 +46,10 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   croppedBlob: Blob;
-
   currentUser: User;
   sub: Subscription;
 
-  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService) { }
+  constructor(private store: Store, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService) { }
 
   ngOnInit() {
   this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
@@ -53,19 +57,20 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const newPost = this.postForm.value;
-    newPost.postTime = new Date();
-    newPost.uId = this.currentUser.uid;
-    newPost.userDisplayUrl = this.currentUser.photoURL;
-    newPost.userDisplayName = this.currentUser.displayName;
-
-
-    this.postService.addPostWithImage(
-      newPost,
-      this.getMetaDataForImage()
-    ).subscribe(postImage => {
-      this.router.navigateByUrl('/forums');
-    });
+    if (this.postForm.value.postName && this.postForm.value.postDescription) {
+      const newPost = this.postForm.value;
+      newPost.postTime = new Date();
+      newPost.uId = this.currentUser.uid;
+      newPost.userDisplayUrl = this.currentUser.photoURL;
+      newPost.userDisplayName = this.currentUser.displayName;
+      this.loading = true;
+      this.store.dispatch(new AddPost(newPost, this.getMetaDataForImage())).subscribe(() => {
+        this.loading = false;
+        this.router.navigateByUrl('/forums');
+      });
+    } else {
+      this.showToast('Please Enter a post name and description');
+    }
   }
 
   private getMetaDataForImage(): ImageMetaData {
@@ -82,8 +87,10 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
           size: fileBeforeCrop.size
         }
       };
+    } else {
+      this.showToast('Please select a photo for your post');
+      this.loading = false;
     }
-    return undefined;
   }
 
   uploadFile(event) {
@@ -93,6 +100,9 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
     this.croppedBlob = event.file;
+  }
+  showToast(message: string) {
+    this.toastService.show(message, 7000, 'blue');
   }
 
   ngOnDestroy(): void {

@@ -7,7 +7,14 @@
         <hr style=" margin-top: 1%">
       </mz-card-title>
 
-      <mz-card-content style="text-align: center">
+      <mz-card-content *ngIf="loading" style="margin-top: 20%">
+        <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 4%">
+          <mz-spinner [color]="'blue'" [size]="'small'" *ngIf="loading">
+          </mz-spinner>
+        </div>
+      </mz-card-content>
+
+      <mz-card-content style="text-align: center" *ngIf="!loading">
 
 
           <mz-input-container >
@@ -27,7 +34,7 @@
             <button (click)="updateImage(post)" mz-button class="green" style="margin-left: 1%">UPDATE POST</button>
           </div>
       </mz-card-content>
-      <mz-card-action fxLayout="column" fxLayoutAlign="center center">
+      <mz-card-action fxLayout="column" fxLayoutAlign="center center" *ngIf="!loading">
         <mz-spinner *ngIf="imageLoad">
 
         </mz-spinner>

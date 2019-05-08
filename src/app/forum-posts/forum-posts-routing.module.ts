@@ -12,7 +12,7 @@ const routes: Routes = [
   {path: 'add/post', component: ForumPostAddComponent, canActivate: [AuthGuard]},
   {path: ':id', component: ForumPostDetailsComponent, canActivate: [AuthGuard]},
   {path: 'user/myPosts', component: ForumPostMyPostsComponent, canActivate: [AuthGuard]},
-  {path: 'update/:id', component: ForumPostUpdateComponent, canActivate: [AuthGuard] }
+  {path: 'user/update', component: ForumPostUpdateComponent, canActivate: [AuthGuard] }
 
 ];
 

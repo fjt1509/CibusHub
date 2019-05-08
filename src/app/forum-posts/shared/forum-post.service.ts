@@ -82,15 +82,28 @@ export class ForumPostService {
   }
 
   deletePost(postId: string): Promise<any> {
+    console.log(postId);
     return this.db.collection<Post>('post').doc(postId).delete();
   }
 
-  updatePostNoNewImage(post: Post): Promise<any> {
-    return this.db.collection<Post>('post').doc(post.id).set(post, {merge: true});
+  updatePostNoNewImage(post: Post): Observable<Post> {
+    const endPoint = 'https://us-central1-cibushub.cloudfunctions.net/Posts';
+    const postToSend: any = {
+      id: post.id,
+      pictureId: post.pictureId,
+      url: post.url,
+      postName: post.postName,
+      postTime: post.postTime,
+      postDescription: post.postDescription,
+      uId: post.uId,
+      userDisplayUrl: post.userDisplayUrl,
+      userDisplayName: post.userDisplayName,
+    };
+    return this.http.put<Post>(endPoint, postToSend);
   }
 
 
-  updatePostWithNewImage(post: Post, imageMeta: ImageMetaData) {
+  updatePostWithNewImage(post: Post, imageMeta: ImageMetaData): Observable<Post> {
     if (imageMeta && imageMeta.fileMeta
       && imageMeta.fileMeta.name && imageMeta.fileMeta.type &&
       (imageMeta.imageBlob || imageMeta.base64Image)) {

@@ -9,11 +9,8 @@ exports.Posts = functions.https.onRequest( (request, response) => {
   cors(request, response, async () => {
   if (request.method === 'GET') {
     admin.firestore().collection('post').get().then(posts => {
-
       const listOfPosts: any = [];
-
       posts.forEach(post => {
-
         let aPost = post.data();
         aPost.id = post.id;
         listOfPosts.push(aPost);
@@ -58,7 +55,6 @@ exports.Posts = functions.https.onRequest( (request, response) => {
         .add(post)
         .then();
       post.id = aPost.id;
-      console.log(post);
       response.json(post);
     } catch (err) {
       response.send(err)
@@ -67,50 +63,64 @@ exports.Posts = functions.https.onRequest( (request, response) => {
 
   else if (request.method === 'PUT') {
     const data = request.body;
-    console.log('1')
 
-    const post: any = {
-      id: data.id,
-      pictureId: data.pictureId,
-      postName: data.postName,
-      postTime: data.postTime,
-      postDescription: data.postDescription,
-      uId: data.uId,
-      userDisplayUrl: data.userDisplayUrl,
-      userDisplayName: data.userDisplayName,
-    };
-    const file = {
-      name: data.image.name,
-      type: data.image.type,
-      size: data.image.size
-    };
-    console.log('2')
-    console.log(post.pictureId)
-    console.log(file)
+    if(data.image) {
 
-    try {
-      await admin.firestore().collection('files').doc(post.pictureId).set(file).then();
-      console.log('3')
+      const post: any = {
+        id: data.id,
+        pictureId: data.pictureId,
+        postName: data.postName,
+        postTime: data.postTime,
+        postDescription: data.postDescription,
+        uId: data.uId,
+        userDisplayUrl: data.userDisplayUrl,
+        userDisplayName: data.userDisplayName,
+      };
+      const file = {
+        name: data.image.name,
+        type: data.image.type,
+        size: data.image.size
+      };
 
-      const base64EncodedImageString = data.image.base64.replace(/^data:image\/\w+;base64,/, '');
-      const imageBuffer = new Buffer(base64EncodedImageString, 'base64');
-      console.log('4')
+      try {
+        await admin.firestore().collection('files').doc(post.pictureId).set(file).then();
 
-      await admin.storage().bucket().file('post-pictures/' + post.pictureId).save(imageBuffer, {gzip: true, metadata: {contentType: file.type}}).then();
-      console.log('5')
+        const base64EncodedImageString = data.image.base64.replace(/^data:image\/\w+;base64,/, '');
+        const imageBuffer = new Buffer(base64EncodedImageString, 'base64');
 
-      await admin.firestore().collection('post').doc(post.id).set(post, {merge: true}).then();
-      console.log('6')
+        await admin.storage().bucket().file('post-pictures/' + post.pictureId).save(imageBuffer, {
+          gzip: true,
+          metadata: {contentType: file.type}
+        }).then();
 
-      response.json(post);
-    } catch (err) {
-      response.send(err);
+        await admin.firestore().collection('post').doc(post.id).set(post, {merge: true}).then();
+
+        response.json(post);
+      } catch (err) {
+        response.send(err);
+      }
     }
 
+    else {
+      const post: any = {
+        id: data.id,
+        pictureId: data.pictureId,
+        postName: data.postName,
+        postTime: data.postTime,
+        postDescription: data.postDescription,
+        uId: data.uId,
+        userDisplayUrl: data.userDisplayUrl,
+        userDisplayName: data.userDisplayName,
+      };
 
-
+      try {
+        await admin.firestore().collection('post').doc(post.id).set(post, {merge: true}).then();
+        response.json(post);
+      } catch (e) {
+        response.send(e);
+      }
+    }
   }
-
 
   else {
     console.log('Method: ' + request.method);

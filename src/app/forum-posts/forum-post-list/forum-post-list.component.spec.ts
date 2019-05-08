@@ -19,7 +19,7 @@ import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component'
 import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-details.component';
 import {ForumPostService} from '../shared/forum-post.service';
 import {RouterTestingModule} from '@angular/router/testing';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Post} from '../shared/post.model';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
@@ -30,9 +30,10 @@ import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireModule} from '@angular/fire';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
+import {FileService} from '../../files/shared/file.service';
 
 
 
@@ -40,6 +41,7 @@ describe('ForumPostListComponent', () => {
   let component: ForumPostListComponent;
   let fixture: ComponentFixture<ForumPostListComponent>;
   let dh: DOMHelper;
+
   const post: Post = {
     id: 'idTest',
     comments: null,
@@ -49,8 +51,13 @@ describe('ForumPostListComponent', () => {
     postTime: new Date(),
     url: 'urlTest'};
 
+  let FireStoreMock: any;
+  let FileServiceMock: any;
+
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+
       imports: [
         NgxsModule.forRoot([
           PostState
@@ -73,6 +80,7 @@ describe('ForumPostListComponent', () => {
         ForumPostsRoutingModule,
         AngularFireAuthModule,
         AngularFireModule,
+        AngularFirestoreModule,
         BrowserDynamicTestingModule,
         RouterTestingModule.withRoutes(
           [
@@ -89,25 +97,34 @@ describe('ForumPostListComponent', () => {
         ForumPostAddComponent,
         ForumPostDetailsComponent,
         ForumPostMyPostsComponent,
-        ForumPostUpdateComponent ],
-      providers: [{provide: ForumPostService, useClass: ForumPostServiceStub},
-        {provide: AngularFireAuth, useClass: AngularAuthStub},
-        {provide: AngularFirestore, useClass: AngularFireStub}]
+        ForumPostUpdateComponent
+      ],
+      providers: [
+        {provide: ForumPostService, useClass: ForumPostServiceStub},
+        {provide: AngularFirestore, useValue: FireStoreMock},
+        {provide: FileService, useValue: FileServiceMock}
+        ]
 
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore',['dispatch']);
+    FileServiceMock = jasmine.createSpyObj('FileService',['getFileUrl']);
     fixture = TestBed.createComponent(ForumPostListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     dh = new DOMHelper(fixture);
+
+
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
 
 
   it('Should contain a add post button on the page', () => {
@@ -132,19 +149,18 @@ describe('ForumPostListComponent', () => {
   });
 
 
-/*
+
   it('Should not show any posts when no post in list', () => {
     expect(dh.count('mz-card')).toBe(1);
   });
- */
-/*
+
   it('Should show 1 post when there is 1 post in list', () => {
-    component.postList = of([post]);
+    component.posts = of([post]);
     fixture.detectChanges();
     const cardItems = fixture.debugElement.queryAll(By.css('mz-card'));
     console.log(cardItems);
   });
- */
+
 
 });
 
@@ -152,12 +168,7 @@ class ForumPostServiceStub {
   getForumPosts(): Observable<Post[]> {
     return of([]);
   }}
-class AngularAuthStub {
 
-}
-class AngularFireStub {
-
-}
 class DummyComponent {
 
 }

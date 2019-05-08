@@ -72,11 +72,11 @@ describe('ForumPostUpdateComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-/*
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
- */
+
 });
 class AngularAuthStub {
 

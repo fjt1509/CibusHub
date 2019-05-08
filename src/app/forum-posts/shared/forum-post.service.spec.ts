@@ -18,6 +18,7 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileMetadataModule} from '../../files/file-metadata.module';
 import {ImageCropperModule} from 'ngx-image-cropper';
+import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 
 
 describe('ForumPostService', () => {
@@ -54,7 +55,8 @@ describe('ForumPostService', () => {
       providers: [
         {provide: AngularFirestore, useValue: fireStoreMock},
         {provide: FileService, useValue: fileServiceMock}
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     });
     httpMock = getTestBed().get(HttpTestingController);
     service = TestBed.get(ForumPostService);

@@ -31,6 +31,8 @@ import {AngularFireModule} from '@angular/fire';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 import {AngularFirestore} from '@angular/fire/firestore';
+import {NgxsModule} from '@ngxs/store';
+import {PostState} from '../store/post.state';
 
 
 
@@ -50,6 +52,9 @@ describe('ForumPostListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        NgxsModule.forRoot([
+          PostState
+        ]),
         BrowserAnimationsModule,
         CommonModule,
         ForumPostsRoutingModule,

@@ -12,6 +12,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {tap} from 'rxjs/operators';
 import {Post} from '../shared/post.model';
 import {MzToastService} from 'ngx-materialize';
+import {Store} from '@ngxs/store';
+import {UpdatePost, UpdatePostIncPic} from '../store/post.action';
 
 @Component({
   selector: 'app-forum-post-update',
@@ -47,7 +49,7 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
   newImageSelected: boolean;
   imageLoad: boolean;
 
-  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService) { }
+  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService, private store: Store) { }
 
   ngOnInit() {
     this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
@@ -72,17 +74,10 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
   updateImage(postInfo: Post) {
     postInfo.id = this.postId;
     if (this.imageChangedEvent) {
-      this.postService.updatePostWithNewImage(postInfo, this.getMetaDataForImage()).subscribe(() => this.router.navigateByUrl(''), error1 => this.showToast('Failed to update the Post'));
+      this.store.dispatch(new UpdatePostIncPic(postInfo, this.getMetaDataForImage())).subscribe(() => this.router.navigateByUrl(''), error1 => this.showToast('Failed to update the Post'));
     } else {
-      this.postService.updatePostNoNewImage(postInfo).then( succ => this.router.navigateByUrl('')).catch( err => this.showToast('Failed to update the Post' ));
+      this.store.dispatch(new UpdatePost(postInfo)).subscribe(() => this.router.navigateByUrl(''), error1 => this.showToast('Failed to update the Post'));
     }
-
-
-
-    /*
-    this.postService.addPostWithImage(null, this.getMetaDataForImage()).subscribe(postImage => {
-      this.router.navigateByUrl('/forums');
-    }); */
   }
 
 

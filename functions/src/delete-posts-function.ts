@@ -7,17 +7,9 @@ exports.deletePost = functions.firestore.document('post/{postID}').onDelete((sna
     try {
       if (deletedPost) {
         await admin.firestore().collection('post').doc(deletedPost.id).collection('comments').get().then( snapQue => snapQue.forEach(doc => doc.ref.delete()))
-
-
-        await admin.firestore().collection('files')
-          .doc(deletedPost.pictureId)
-          .delete()
-          .then();
-        const resultFromStorage = await admin.storage()
-          .bucket()
-          .file('post-pictures/' + deletedPost.pictureId)
-          .delete()
-          .then()
+        console.log(deletedPost.pictureId);
+        await admin.firestore().collection('files').doc(deletedPost.pictureId).delete().then();
+        const resultFromStorage = await admin.storage().bucket().file('post-pictures/' + deletedPost.pictureId).delete().then()
         resolve(resultFromStorage);
       }
     } catch (error) {

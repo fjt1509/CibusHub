@@ -3,6 +3,9 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ForumPostService} from '../shared/forum-post.service';
 import {Observable} from 'rxjs';
 import {Post} from '../shared/post.model';
+import {Select, Store} from '@ngxs/store';
+import {PostState} from '../store/post.state';
+import {GetPosts} from '../store/post.action';
 
 @Component({
   selector: 'app-forum-post-list',
@@ -25,12 +28,12 @@ import {Post} from '../shared/post.model';
 })
 export class ForumPostListComponent implements OnInit {
 
-  postList: Observable<Post[]>;
+  @Select(PostState.getPostList) posts: Observable<Post[]>;
 
-  constructor(private postService: ForumPostService) { }
+  constructor(private store: Store) { }
 
   ngOnInit() {
-    this.postList = this.postService.getForumPosts();
+    this.store.dispatch(new GetPosts());
   }
 
   convertDate(postTime: any) {

@@ -6,6 +6,8 @@ import {AuthService} from '../../authentication/shared/auth.service';
 import {User} from '../../authentication/shared/user.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Router} from '@angular/router';
+import {Store} from '@ngxs/store';
+import {DeletePost} from '../store/post.action';
 
 @Component({
   selector: 'app-forum-post-my-posts',
@@ -33,7 +35,7 @@ export class ForumPostMyPostsComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
 
-  constructor(private postServ: ForumPostService, private authService: AuthService, private router: Router) {
+  constructor(private postServ: ForumPostService, private authService: AuthService, private router: Router, private store: Store) {
   }
 
   ngOnInit() {
@@ -58,6 +60,6 @@ export class ForumPostMyPostsComponent implements OnInit, OnDestroy {
 
 
   deletePost(id: string) {
-    this.postServ.deletePost(id);
+    this.store.dispatch(new DeletePost(id));
   }
 }

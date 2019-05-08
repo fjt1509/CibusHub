@@ -11,6 +11,8 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../../authentication/shared/auth.service';
 import {Subscription} from 'rxjs';
 import {User} from '../../authentication/shared/user.model';
+import {Store} from '@ngxs/store';
+import {AddPost} from '../store/post.action';
 
 @Component({
   selector: 'app-forum-post-add',
@@ -45,7 +47,7 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   currentUser: User;
   sub: Subscription;
 
-  constructor(private postService: ForumPostService, private fileService: FileService, private router: Router, private authServ: AuthService) { }
+  constructor(private store: Store, private fileService: FileService, private router: Router, private authServ: AuthService) { }
 
   ngOnInit() {
   this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
@@ -59,13 +61,7 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
     newPost.userDisplayUrl = this.currentUser.photoURL;
     newPost.userDisplayName = this.currentUser.displayName;
 
-
-    this.postService.addPostWithImage(
-      newPost,
-      this.getMetaDataForImage()
-    ).subscribe(postImage => {
-      this.router.navigateByUrl('/forums');
-    });
+    this.store.dispatch(new AddPost(newPost, this.getMetaDataForImage())).subscribe(() => this.router.navigateByUrl('/forums'));
   }
 
   private getMetaDataForImage(): ImageMetaData {

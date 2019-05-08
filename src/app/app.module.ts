@@ -13,6 +13,8 @@ import {MzNavbarModule} from 'ngx-materialize';
 import {NavbarModule} from './navbar/navbar.module';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxsModule} from '@ngxs/store';
+import {PostState} from './forum-posts/store/post.state';
 
 
 @NgModule({
@@ -28,7 +30,10 @@ import {HttpClientModule} from '@angular/common/http';
     AngularFireAuthModule,
     BrowserAnimationsModule,
     NavbarModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxsModule.forRoot([
+      PostState
+    ])
 ],
   providers: [],
   bootstrap: [AppComponent]

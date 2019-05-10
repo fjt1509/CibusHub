@@ -11,6 +11,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {AuthGuard} from '../../authentication/guard/auth.guard';
+import {of} from 'rxjs';
+import {user} from 'firebase-functions/lib/providers/auth';
 
 describe('ForumPostMyPostsComponent', () => {
   let component: ForumPostMyPostsComponent;
@@ -56,14 +58,16 @@ describe('ForumPostMyPostsComponent', () => {
 
 
   beforeEach(() => {
+    fixture = TestBed.createComponent(ForumPostMyPostsComponent);
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['canActivate'])
     StoreMock = jasmine.createSpyObj('post.action', ['GetPosts', 'AddPost'])
-    fixture = TestBed.createComponent(ForumPostMyPostsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     HttpMock = getTestBed().get(HttpTestingController);
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['pipe'])
+    FireAuthMock.pipe.and.returnValue(of([user()]));
+
+
   });
 
   it('should create', () => {

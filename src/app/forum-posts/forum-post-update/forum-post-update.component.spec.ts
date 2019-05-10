@@ -29,6 +29,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {AuthService} from '../../authentication/shared/auth.service';
+import {of} from 'rxjs';
+import {user} from 'firebase-functions/lib/providers/auth';
 
 describe('ForumPostUpdateComponent', () => {
   let component: ForumPostUpdateComponent;
@@ -80,16 +82,18 @@ describe('ForumPostUpdateComponent', () => {
         ]
     })
 
-    .compileComponents();
+    .compileComponents()
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ForumPostUpdateComponent);
     httpMock = getTestBed().get(HttpTestingController);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    component.ngOnInit();
     FireAuthMock = jasmine.createSpyObj('AuthService', ['pipe'])
+    FireAuthMock.pipe.and.returnValue(of([]));
+    component = fixture.componentInstance;
+
+
+
   });
 
   it('should create', () => {
@@ -97,9 +101,7 @@ describe('ForumPostUpdateComponent', () => {
   });
 
 });
-class AngularAuthStub {
 
-}
 class AngularFireStub{
 
 }

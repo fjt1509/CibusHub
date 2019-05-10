@@ -10,6 +10,7 @@ import {AuthService} from '../../authentication/shared/auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
+import {AuthGuard} from '../../authentication/guard/auth.guard';
 
 describe('ForumPostMyPostsComponent', () => {
   let component: ForumPostMyPostsComponent;
@@ -29,11 +30,11 @@ describe('ForumPostMyPostsComponent', () => {
         CUSTOM_ELEMENTS_SCHEMA,
         NO_ERRORS_SCHEMA
       ],
-      providers:[{provide: AngularFirestore, useValue: FireStoreMock},
+      providers: [{provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
         {provide: HttpTestingController, useValue: HttpMock},
         {provide: AuthService, useValue: FireAuthMock}],
-      imports:[
+      imports: [
         NgxsModule.forRoot([
           PostState
         ]),
@@ -55,10 +56,10 @@ describe('ForumPostMyPostsComponent', () => {
 
 
   beforeEach(() => {
-    FileServiceMock = jasmine.createSpyObj('FileService',['getFileUrl']);
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore',['dispatch']);
-    FireAuthMock = jasmine.createSpyObj('AuthService',['googleSignin','updateUserData'])
-    StoreMock = jasmine.createSpyObj('post.action',['GetPosts','AddPost'])
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['canActivate'])
+    StoreMock = jasmine.createSpyObj('post.action', ['GetPosts', 'AddPost'])
     fixture = TestBed.createComponent(ForumPostMyPostsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

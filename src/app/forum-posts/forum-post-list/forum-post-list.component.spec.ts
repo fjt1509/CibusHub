@@ -34,6 +34,8 @@ import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore'
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {FileService} from '../../files/shared/file.service';
+import {AuthService} from '../../authentication/shared/auth.service';
+import {AuthGuard} from '../../authentication/guard/auth.guard';
 
 
 
@@ -53,6 +55,7 @@ describe('ForumPostListComponent', () => {
 
   let FireStoreMock: any;
   let FileServiceMock: any;
+  let FireAuthMock: any;
 
 
   beforeEach(async(() => {
@@ -102,7 +105,8 @@ describe('ForumPostListComponent', () => {
       providers: [
         {provide: ForumPostService, useClass: ForumPostServiceStub},
         {provide: AngularFirestore, useValue: FireStoreMock},
-        {provide: FileService, useValue: FileServiceMock}
+        {provide: FileService, useValue: FileServiceMock},
+        {provide: AuthGuard, useValue: FireAuthMock}
         ]
 
     })
@@ -110,8 +114,9 @@ describe('ForumPostListComponent', () => {
   }));
 
   beforeEach(() => {
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore',['dispatch']);
-    FileServiceMock = jasmine.createSpyObj('FileService',['getFileUrl']);
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireAuthMock = jasmine.createSpyObj('AuthGuard', ['canActivate'])
     fixture = TestBed.createComponent(ForumPostListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

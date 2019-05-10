@@ -159,12 +159,7 @@ describe('ForumPostListComponent', () => {
     expect(dh.count('mz-card')).toBe(1);
   });
 
-  it('Should show 1 post when there is 1 post in list', () => {
-    component.posts = of([post]);
-    fixture.detectChanges();
-    const cardItems = fixture.debugElement.queryAll(By.css('mz-card'));
-    console.log(cardItems);
-  });
+
 
 
 });

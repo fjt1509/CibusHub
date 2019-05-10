@@ -25,11 +25,16 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NgxsModule} from '@ngxs/store';
+import {PostState} from '../store/post.state';
+import {AuthService} from '../../authentication/shared/auth.service';
 
 describe('ForumPostUpdateComponent', () => {
   let component: ForumPostUpdateComponent;
   let fixture: ComponentFixture<ForumPostUpdateComponent>;
   let httpMock: HttpTestingController;
+  let FireAuthMock: any;
 
 
   beforeEach(async(() => {
@@ -56,21 +61,35 @@ describe('ForumPostUpdateComponent', () => {
         ImageCropperModule,
         MzProgressModule,
         MzToastModule,
-        HttpClientTestingModule],
+        HttpClientTestingModule,
+        NgxsModule.forRoot([
+          PostState
+        ]),
+        RouterTestingModule.withRoutes(
+          [
+            {path: '', component: DummyComponent },
+            {path: 'add/post', component: DummyComponent},
+            {path: ':id', component: DummyComponent}
+          ]
+
+        )],
       providers:[
-        {provide: AngularFireAuth, useClass: AngularAuthStub},
+        {provide: AuthService, useValue: FireAuthMock},
         {provide: AngularFirestore, useClass: AngularFireStub},
-        {provide: AngularFireStorage, useClass: AngularStorageStub}
+        {provide: AngularFireStorage, useValue: AngularStorageStub}
         ]
     })
 
     .compileComponents();
   }));
-  httpMock = getTestBed().get(HttpTestingController);
+
   beforeEach(() => {
     fixture = TestBed.createComponent(ForumPostUpdateComponent);
+    httpMock = getTestBed().get(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.ngOnInit();
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['pipe'])
   });
 
   it('should create', () => {
@@ -88,4 +107,7 @@ class AngularStorageStub{
 
 }
 
+class DummyComponent {
+
+}
 

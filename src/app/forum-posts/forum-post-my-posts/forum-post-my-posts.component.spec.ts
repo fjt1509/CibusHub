@@ -41,15 +41,15 @@ describe('ForumPostMyPostsComponent', () => {
           PostState
         ]),
         AngularFirestoreModule,
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes(
-          [
-            {path: '', component: DummyComponent },
-            {path: 'add/post', component: DummyComponent},
-            {path: ':id', component: DummyComponent}
-          ]
+      HttpClientTestingModule,
+      RouterTestingModule.withRoutes(
+        [
+          {path: '', component: DummyComponent },
+          {path: 'add/post', component: DummyComponent},
+          {path: ':id', component: DummyComponent}
+        ]
 
-        )],
+      )],
 
     })
 

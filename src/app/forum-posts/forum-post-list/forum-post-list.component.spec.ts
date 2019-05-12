@@ -43,6 +43,9 @@ describe('ForumPostListComponent', () => {
   let component: ForumPostListComponent;
   let fixture: ComponentFixture<ForumPostListComponent>;
   let dh: DOMHelper;
+  let FireStoreMock: any;
+  let FileServiceMock: any;
+  let FireAuthMock: any;
 
   const post: Post = {
     id: 'idTest',
@@ -53,9 +56,7 @@ describe('ForumPostListComponent', () => {
     postTime: new Date(),
     url: 'urlTest'};
 
-  let FireStoreMock: any;
-  let FileServiceMock: any;
-  let FireAuthMock: any;
+
 
 
   beforeEach(async(() => {

@@ -28,6 +28,7 @@ import {ForumPostListComponent} from '../forum-post-list/forum-post-list.compone
 import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-details.component';
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
+import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -35,6 +36,7 @@ describe('ForumPostAddComponent', () => {
   let FireStoreMock: any;
   let FileServiceMock: any;
   let FireAuthMock: any;
+  let dh: DOMHelper;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
 
@@ -87,6 +89,7 @@ describe('ForumPostAddComponent', () => {
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
     fixture = TestBed.createComponent(ForumPostAddComponent);
     component = fixture.componentInstance;
+    dh = new DOMHelper(fixture);
 
   });
   it('should create', () => {

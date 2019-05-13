@@ -96,6 +96,8 @@ describe('ForumPostDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+
+
 });
 class DummyComponent {
 

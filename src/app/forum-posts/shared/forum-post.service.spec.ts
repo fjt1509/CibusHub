@@ -24,6 +24,9 @@ import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-detail
 import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
+import any = jasmine.any;
+import {of} from 'rxjs';
+
 
 
 describe('ForumPostService', () => {
@@ -31,13 +34,22 @@ describe('ForumPostService', () => {
   let fileServiceMock: any;
   let httpMock: HttpTestingController;
   let service: ForumPostService;
-  let fsCollectionMock: any;
+  let fsCollection: any;
+
   beforeEach(() => {
     fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload'])
-    fireStoreMock = jasmine.createSpyObj('AngularFirestore', ['collection'])
-    fsCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges']);
+    fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection'])
+    fsCollection = jasmine.createSpyObj('collection', ['doc','valueChanges']);
+    fireStoreMock.collection.and.returnValue(fsCollection)
+    fsCollection.doc.and.returnValue(of([]))
+    fsCollection.valueChanges.and.returnValue(of([]))
+
+
+
+
+
     TestBed.configureTestingModule({
-      declarations:[ForumPostDetailsComponent,
+      declarations: [ForumPostDetailsComponent,
         ForumPostListComponent,
         ForumPostAddComponent,
         ForumPostMyPostsComponent,
@@ -68,9 +80,26 @@ describe('ForumPostService', () => {
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     });
     httpMock = getTestBed().get(HttpTestingController);
+
     service = TestBed.get(ForumPostService);
+    service.getForumPosts();
+
   });
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  describe('getForumPosts', () => {
+    beforeEach(() => {
+
+
+    });
+    it('should be created', () => {
+      expect(service).toBeTruthy();
+    });
+  /*/  it('should call getForumPosts once', () => {
+      let id: string;
+      service.getForumPostById(id);
+      expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
+
+    });
+
+
+ /*/ });
 });

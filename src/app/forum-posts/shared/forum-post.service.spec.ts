@@ -26,6 +26,7 @@ import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-po
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
 import any = jasmine.any;
 import {of} from 'rxjs';
+import {post} from 'selenium-webdriver/http';
 
 
 
@@ -39,13 +40,10 @@ describe('ForumPostService', () => {
   beforeEach(() => {
     fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload'])
     fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection'])
-    fsCollection = jasmine.createSpyObj('collection', ['doc','valueChanges']);
+    fsCollection = jasmine.createSpyObj('collection', ['collection', 'doc', 'valueChanges', 'delete']);
     fireStoreMock.collection.and.returnValue(fsCollection)
     fsCollection.doc.and.returnValue(of([]))
     fsCollection.valueChanges.and.returnValue(of([]))
-
-
-
 
 
     TestBed.configureTestingModule({
@@ -85,21 +83,24 @@ describe('ForumPostService', () => {
     service.getForumPosts();
 
   });
-  describe('getForumPosts', () => {
+  describe('Post Service', () => {
     beforeEach(() => {
-
-
+      service.getForumPosts();
+      httpMock = getTestBed().get(HttpTestingController);
     });
     it('should be created', () => {
       expect(service).toBeTruthy();
     });
-  /*/  it('should call getForumPosts once', () => {
-      let id: string;
-      service.getForumPostById(id);
-      expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
-
+    it('getForumPosts should return an Observable with a Post', () => {
+      const dummyPost = [{
+        postName: 'test',
+        postDescription: 'test2'
+      }];
+      service.getForumPosts().subscribe(posts => {
+        expect(posts.length).toBe(2);
+        expect(posts).toEqual(dummyPost);
+      });
     });
+  });
 
-
- /*/ });
 });

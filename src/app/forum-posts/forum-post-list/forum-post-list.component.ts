@@ -27,18 +27,12 @@ import {GetPosts} from '../store/post.action';
   ]
 })
 export class ForumPostListComponent implements OnInit {
-
   @Select(PostState.getPostList) posts: Observable<Post[]>;
+  @Select(PostState.loading) loading: Observable<boolean>;
 
-  loading: boolean;
   constructor(private store: Store) { }
 
   ngOnInit() {
-    if (!this.posts) {
-      this.loading = true;
-    } else {
-      this.loading = false;
-    }
     this.store.dispatch(new GetPosts());
   }
 

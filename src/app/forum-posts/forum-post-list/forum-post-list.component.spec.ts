@@ -31,18 +31,21 @@ import {AngularFireModule} from '@angular/fire';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {NgxsModule} from '@ngxs/store';
+import {NgxsModule, Store} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {FileService} from '../../files/shared/file.service';
 import {AuthService} from '../../authentication/shared/auth.service';
 import {AuthGuard} from '../../authentication/guard/auth.guard';
+import {ForumPostsModule} from '../forum-posts.module';
+import {GetPosts} from '../store/post.action';
 
 
 
 describe('ForumPostListComponent', () => {
   let component: ForumPostListComponent;
   let fixture: ComponentFixture<ForumPostListComponent>;
-  let dh: DOMHelper;
+  let dh: DOMHelper<ForumPostListComponent>;
+  let postServiceMock: any;
   let FireStoreMock: any;
   let FileServiceMock: any;
   let FireAuthMock: any;
@@ -54,14 +57,17 @@ describe('ForumPostListComponent', () => {
     postDescription: 'descriptionTest',
     postName: 'postnameTest',
     postTime: new Date(),
-    url: 'urlTest'};
-
-
+    url: 'urlTest'
+  };
 
 
   beforeEach(async(() => {
+    postServiceMock = jasmine.createSpyObj('ForumPostService', ['getForumPosts']);
+    postServiceMock.getForumPosts.and.returnValue(of([]));
     TestBed.configureTestingModule({
 
+      declarations: [
+      ],
       imports: [
         NgxsModule.forRoot([
           PostState
@@ -86,6 +92,7 @@ describe('ForumPostListComponent', () => {
         AngularFireModule,
         AngularFirestoreModule,
         BrowserDynamicTestingModule,
+        ForumPostsModule,
         RouterTestingModule.withRoutes(
           [
             {path: '', component: DummyComponent },
@@ -96,22 +103,16 @@ describe('ForumPostListComponent', () => {
         )
 
       ],
-      declarations: [
-        ForumPostListComponent,
-        ForumPostAddComponent,
-        ForumPostDetailsComponent,
-        ForumPostMyPostsComponent,
-        ForumPostUpdateComponent
-      ],
+
       providers: [
-        {provide: ForumPostService, useClass: ForumPostServiceStub},
+        {provide: ForumPostService, useValue: postServiceMock},
         {provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
         {provide: AuthGuard, useValue: FireAuthMock}
-        ]
+      ]
 
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -120,7 +121,6 @@ describe('ForumPostListComponent', () => {
     FireAuthMock = jasmine.createSpyObj('AuthGuard', ['canActivate'])
     fixture = TestBed.createComponent(ForumPostListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     dh = new DOMHelper(fixture);
 
 
@@ -129,9 +129,7 @@ describe('ForumPostListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
-
+/*
 
   it('Should contain a add post button on the page', () => {
     const linkDev = fixture.debugElement.queryAll(By.css('Button'));
@@ -153,25 +151,70 @@ describe('ForumPostListComponent', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => expect(location.path('')).toBe('/'));
   });
+*/
 
 
 
-  it('Should not show any posts when no post in list', () => {
-    expect(dh.count('mz-card')).toBe(1);
+  describe('List Posts', () => {
+    let helper: Helper;
+    beforeEach(() => {
+      helper = new Helper();
+      fixture.detectChanges();
+    });
+    it('Should not show any posts when no post in list', () => {
+      postServiceMock.getForumPosts.and.returnValue(helper.getPosts(0));
+      const store = TestBed.get(Store) as Store;
+      store.dispatch(new GetPosts())
+      fixture.detectChanges();
+      component.posts.subscribe(posts => {
+        expect(posts.length).toBe(0);
+      });
+    });
+
+    it('Should show one list item when I have one post', () => {
+      postServiceMock.getForumPosts.and.returnValue(helper.getPosts(1));
+      const store = TestBed.get(Store) as Store;
+      store.dispatch(new GetPosts())
+      fixture.detectChanges();
+      component.posts.subscribe(posts => {
+        expect(posts.length).toBe(1);
+        expect(posts[0].id).toBe(helper.postList[0].id);
+      });
   });
+    it('Should show 100 list item when I have 100 posts', () => {
+      postServiceMock.getForumPosts.and.returnValue(helper.getPosts(100));
+      const store = TestBed.get(Store) as Store;
+      store.dispatch(new GetPosts())
+      fixture.detectChanges();
+      component.posts.subscribe(posts => {
+        expect(posts.length).toBe(100);
+      });
+    });
 
-
-
-
+    it('Should show date stuff', () => {
+      const date = component.convertDate('08-08-08');
+      expect(date).toBe('Date: 8.8.2008');
+    });
+  });
 });
+  class DummyComponent {
+  }
 
-class ForumPostServiceStub {
-  getForumPosts(): Observable<Post[]> {
-    return of([]);
-  }}
+  class Helper {
+    postList: Post[] = [];
 
-class DummyComponent {
+    getPosts(amount: number): Observable<Post[]> {
+      for (let i = 0; i < amount; i++) {
+        this.postList.push(
+          {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+        );
+      }
+      return of(this.postList);
+    }
+  }
 
-}
+
+
+
 
 

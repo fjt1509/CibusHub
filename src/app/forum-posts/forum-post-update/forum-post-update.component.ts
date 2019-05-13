@@ -110,7 +110,9 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
     this.store.dispatch(new SetSelectedPost(null));
   }
 

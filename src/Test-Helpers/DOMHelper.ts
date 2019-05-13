@@ -1,12 +1,11 @@
 import {ComponentFixture} from '@angular/core/testing';
-import {HomepageComponent} from '../app/home/homepage/homepage.component';
 import {By} from '@angular/platform-browser';
 
 
-export class DOMHelper {
+export class DOMHelper<T> {
 
-  private fixture: ComponentFixture<HomepageComponent>;
-  constructor(fixture: ComponentFixture<HomepageComponent>){
+  private fixture: ComponentFixture<T>;
+  constructor(fixture: ComponentFixture<T>) {
     this.fixture = fixture;
   }
 

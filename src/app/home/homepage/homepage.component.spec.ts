@@ -14,7 +14,7 @@ import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 describe('HomepageComponent', () => {
   let component: HomepageComponent;
   let fixture: ComponentFixture<HomepageComponent>;
-  let dh: DOMHelper;
+  let dh: DOMHelper<HomepageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

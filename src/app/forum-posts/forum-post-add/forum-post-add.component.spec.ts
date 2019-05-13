@@ -36,11 +36,15 @@ describe('ForumPostAddComponent', () => {
   let FireStoreMock: any;
   let FileServiceMock: any;
   let FireAuthMock: any;
-  let dh: DOMHelper;
+  let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-
-      declarations: [ ForumPostAddComponent, ForumPostListComponent, ForumPostDetailsComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent ],
+declarations: [
+  ForumPostAddComponent,
+  ForumPostListComponent,
+  ForumPostDetailsComponent,
+  ForumPostMyPostsComponent,
+  ForumPostUpdateComponent ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
         NO_ERRORS_SCHEMA

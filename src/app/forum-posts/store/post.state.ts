@@ -7,6 +7,7 @@ import {AddPost, DeletePost, GetPosts, SetSelectedPost, UpdatePost, UpdatePostIn
 export class PostStateModel {
   posts: Post[];
   selectedPost: Post;
+  loading: boolean;
 }
 
 @State<PostStateModel>({
@@ -14,6 +15,7 @@ export class PostStateModel {
   defaults: {
     posts: [],
     selectedPost: null,
+    loading: false
   }
 })
 
@@ -27,17 +29,20 @@ export class PostState {
   }
 
   @Selector()
+  static loading(state: PostStateModel) {
+    return state.loading;
+  }
+
+  @Selector()
   static getSelectedPost(state: PostStateModel) {
     return state.selectedPost;
   }
-
-
 
   @Action(GetPosts)
   getPosts({getState, setState}: StateContext<PostStateModel>) {
     return this.postServ.getForumPosts().pipe(tap((result) => {
       const state = getState();
-      setState({...state, posts: result});
+      setState({...state, posts: result, loading: true});
     }));
   }
 

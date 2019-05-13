@@ -24,7 +24,7 @@ import {of} from 'rxjs';
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
-  let dh: DOMHelper;
+  let dh: DOMHelper<NavbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

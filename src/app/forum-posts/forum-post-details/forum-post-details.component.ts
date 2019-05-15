@@ -61,7 +61,7 @@ export class ForumPostDetailsComponent implements OnInit {
 
     this.comments = this.postService.getForumPostWithComments(this.postId);
 
-    this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
+    this.sub = this.authServ.authState().subscribe(user => {this.currentUser = user; });
 
     this.createComment = false;
 

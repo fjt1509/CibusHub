@@ -12,11 +12,10 @@ import {auth} from 'firebase';
 })
 export class AuthService {
 
-  user$: Observable<User>;
+  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore, private router: Router) {}
 
-  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore, private router: Router) {
-
-    this.user$ = this.afAuth.authState.pipe(
+  authState() {
+    return this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
@@ -25,9 +24,7 @@ export class AuthService {
         }
       })
     );
-
   }
-
   async googleSignin() {
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.auth.signInWithPopup(provider);

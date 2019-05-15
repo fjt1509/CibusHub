@@ -33,6 +33,7 @@ import Toast = Materialize.Toast;
 import {Post} from '../shared/post.model';
 import {Observable, of} from 'rxjs';
 import {User} from '../../authentication/shared/user.model';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -43,19 +44,20 @@ describe('ForumPostAddComponent', () => {
   let ToastMock: any;
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['doc', 'valueChanges']);
+    ToastMock = jasmine.createSpyObj('MzToastService', ['show']);
     TestBed.configureTestingModule({
 declarations: [
-  ForumPostAddComponent,
-  ForumPostListComponent,
-  ForumPostDetailsComponent,
-  ForumPostMyPostsComponent,
-  ForumPostUpdateComponent ],
+  ForumPostAddComponent],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
         NO_ERRORS_SCHEMA
       ],
       imports: [CommonModule,
-        ForumPostsRoutingModule,
+        BrowserAnimationsModule,
         FlexLayoutModule,
         MzCardModule,
         MzButtonModule,
@@ -94,13 +96,11 @@ declarations: [
   }));
 
   beforeEach(() => {
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['subscribe'])
-    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['doc', 'valueChanges']);
-    ToastMock = jasmine.createSpyObj('MzToastService', ['show']);
     fixture = TestBed.createComponent(ForumPostAddComponent);
     dh = new DOMHelper(fixture);
+    fixture.detectChanges();
     component = fixture.componentInstance;
+
 
 
   });
@@ -115,11 +115,6 @@ declarations: [
     });
     it('should create', () => {
       expect(component).toBeTruthy();
-    });
-
-    it('Should subscribe on user on AuthService one time on ngOnInit', async () => {
-
-
     });
 
   });

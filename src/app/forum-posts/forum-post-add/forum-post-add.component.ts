@@ -52,7 +52,7 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   constructor(private store: Store, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService) { }
 
   ngOnInit() {
-  this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
+  this.sub = this.authServ.authState().subscribe(user => {this.currentUser = user; });
 
   }
 

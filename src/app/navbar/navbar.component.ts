@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.sub = this.authService.user$.subscribe( user => {this.user = user; });
+    this.sub = this.authService.authState().subscribe( user => {this.user = user; });
   }
 
   ngOnDestroy() {

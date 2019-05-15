@@ -56,7 +56,7 @@ export class ForumPostUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.authServ.user$.subscribe(user => {this.currentUser = user; });
+    this.sub = this.authServ.authState().subscribe(user => {this.currentUser = user; });
     this.post = this.store.select( PostState.getSelectedPost).pipe(tap(postRef => {
       if (postRef) {
         this.imageLoad = true;

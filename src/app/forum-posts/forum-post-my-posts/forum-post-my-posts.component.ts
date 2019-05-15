@@ -39,7 +39,7 @@ export class ForumPostMyPostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.authService.user$.subscribe(user => {
+    this.sub = this.authService.authState().subscribe(user => {
       this.user = user;
       this.postList = this.postServ.getForumPostsFromUser(this.user.uid);
     });

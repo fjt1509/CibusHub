@@ -29,6 +29,8 @@ import {ForumPostListComponent} from '../forum-post-list/forum-post-list.compone
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
 import {ForumPostService} from '../shared/forum-post.service';
+import {of} from 'rxjs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('ForumPostDetailsComponent', () => {
   let component: ForumPostDetailsComponent;
@@ -38,6 +40,13 @@ describe('ForumPostDetailsComponent', () => {
   let FireAuthMock: any;
   let ForumPostMock: any;
   beforeEach(async(() => {
+    ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById', 'getForumPostWithComments']);
+    ForumPostMock.getForumPostById.and.returnValue(of([]));
+    ForumPostMock.getForumPostWithComments.and.returnValue(of([]));
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
     TestBed.configureTestingModule({
 
       declarations: [ ForumPostDetailsComponent, ForumPostListComponent, ForumPostAddComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent ],
@@ -59,6 +68,8 @@ describe('ForumPostDetailsComponent', () => {
         FileMetadataModule,
         ImageCropperModule,
         MzProgressModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
         MzToastModule,
         NgxsModule.forRoot([
           PostState
@@ -83,12 +94,9 @@ describe('ForumPostDetailsComponent', () => {
   }));
 
   beforeEach(() => {
-    ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById']);
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['collection'])
-    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
     fixture = TestBed.createComponent(ForumPostDetailsComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
   });
 

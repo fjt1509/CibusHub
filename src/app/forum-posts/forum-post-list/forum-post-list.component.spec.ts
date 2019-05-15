@@ -62,6 +62,9 @@ describe('ForumPostListComponent', () => {
 
 
   beforeEach(async(() => {
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
     postServiceMock = jasmine.createSpyObj('ForumPostService', ['getForumPosts']);
     postServiceMock.getForumPosts.and.returnValue(of([]));
     TestBed.configureTestingModule({
@@ -116,9 +119,6 @@ describe('ForumPostListComponent', () => {
   }));
 
   beforeEach(() => {
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
-    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    FireAuthMock = jasmine.createSpyObj('AuthGuard', ['canActivate'])
     fixture = TestBed.createComponent(ForumPostListComponent);
     component = fixture.componentInstance;
     dh = new DOMHelper(fixture);

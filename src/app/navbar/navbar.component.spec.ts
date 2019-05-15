@@ -25,8 +25,10 @@ describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let dh: DOMHelper<NavbarComponent>;
-
+  let FireAuthMock: any;
   beforeEach(async(() => {
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
     TestBed.configureTestingModule({
       declarations: [NavbarComponent],
       imports: [
@@ -49,7 +51,7 @@ describe('NavbarComponent', () => {
         )
       ],
       providers: [
-        {provide: AuthService, useClass: AuthServiceStub }
+        {provide: AuthService, useValue: FireAuthMock }
       ]
     })
     .compileComponents();
@@ -73,8 +75,6 @@ describe('NavbarComponent', () => {
   });
 });
 
-class AuthServiceStub {
-  user$ = of(null);
-}
+
 
 class DummyComponent {}

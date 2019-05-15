@@ -12,7 +12,7 @@ describe('FileService', () => {
   let FileServiceMock: any;
   beforeEach(() => {
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    fireStoreMock = jasmine.createSpyObj('AngularFirestore', ['collection'])
+    fireStoreMock = jasmine.createSpyObj('AngularFirestore', ['ref'])
     TestBed.configureTestingModule({
       imports: [
         AngularFirestoreModule,

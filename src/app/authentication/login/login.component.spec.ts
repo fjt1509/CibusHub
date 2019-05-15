@@ -16,7 +16,12 @@ describe('LoginComponent', () => {
 
 
   beforeEach(async(() => {
+
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    //FireAuthMock.then.and.returnValue();
     TestBed.configureTestingModule({
+
       imports:[RouterTestingModule.withRoutes(
         [
           {path: '', component: DummyComponent },
@@ -40,9 +45,6 @@ describe('LoginComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['googleSignIn', 'then'])
-    //FireAuthMock.googleSignin.and.returnValue();
-    //FireAuthMock.then.and.returnValue();
     router = TestBed.get(Router);
     fixture.detectChanges();
   });

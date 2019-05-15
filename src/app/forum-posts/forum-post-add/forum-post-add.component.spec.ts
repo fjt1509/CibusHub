@@ -101,15 +101,12 @@ declarations: [
     fixture.detectChanges();
     component = fixture.componentInstance;
 
-
-
   });
 
   describe('Add Posts', () => {
     let helper: Helper;
     beforeEach(() => {
       helper = new Helper();
-
 
 
     });

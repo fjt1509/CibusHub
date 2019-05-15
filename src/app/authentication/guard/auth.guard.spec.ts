@@ -25,11 +25,7 @@ describe('AuthGuard', () => {
         LoginComponent
       ]
     });
-    /*
-      it('should ...', inject([AuthGuard], (guard: AuthGuard) => {
-        expect(guard).toBeTruthy();
-      }));
-     */
+
   });
 });
 

@@ -22,7 +22,7 @@ import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component'
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SchemaMetadata} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -31,15 +31,23 @@ import {PostState} from '../store/post.state';
 import {AuthService} from '../../authentication/shared/auth.service';
 import {of} from 'rxjs';
 import {user} from 'firebase-functions/lib/providers/auth';
+import {FileService} from '../../files/shared/file.service';
+import {Browser} from 'selenium-webdriver';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('ForumPostUpdateComponent', () => {
   let component: ForumPostUpdateComponent;
   let fixture: ComponentFixture<ForumPostUpdateComponent>;
   let httpMock: HttpTestingController;
   let FireAuthMock: any;
-
+  let FireStoreMock: any;
+  let FileServiceMock: any;
 
   beforeEach(async(() => {
+    FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['ref']);
     TestBed.configureTestingModule({
       declarations: [
         ForumPostDetailsComponent,
@@ -63,7 +71,9 @@ describe('ForumPostUpdateComponent', () => {
         ImageCropperModule,
         MzProgressModule,
         MzToastModule,
+        BrowserAnimationsModule,
         HttpClientTestingModule,
+        AngularFirestoreModule,
         NgxsModule.forRoot([
           PostState
         ]),
@@ -77,20 +87,19 @@ describe('ForumPostUpdateComponent', () => {
         )],
       providers:[
         {provide: AuthService, useValue: FireAuthMock},
-        {provide: AngularFirestore, useClass: AngularFireStub},
-        {provide: AngularFireStorage, useValue: AngularStorageStub}
+        {provide: AngularFirestore, useValue: FireStoreMock},
+        {provide: FileService, useValue: FileServiceMock}
         ]
     })
 
-    .compileComponents()
+    .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ForumPostUpdateComponent);
     httpMock = getTestBed().get(HttpTestingController);
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['pipe'])
-    FireAuthMock.pipe.and.returnValue(of([]));
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
 
 
@@ -102,12 +111,6 @@ describe('ForumPostUpdateComponent', () => {
 
 });
 
-class AngularFireStub{
-
-}
-class AngularStorageStub{
-
-}
 
 class DummyComponent {
 

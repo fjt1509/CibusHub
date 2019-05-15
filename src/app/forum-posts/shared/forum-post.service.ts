@@ -9,9 +9,8 @@ import {map} from 'rxjs/operators';
 import {Comment} from './comment.model';
 import {ImageMetaData} from '../../files/shared/image-metadata.model';
 import {FileService} from '../../files/shared/file.service';
-import {switchMap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
-import {forEach} from '@angular/router/src/utils/collection';
+
 
 @Injectable({
   providedIn: 'root'

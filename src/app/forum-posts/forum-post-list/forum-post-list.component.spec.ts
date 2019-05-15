@@ -129,30 +129,6 @@ describe('ForumPostListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-/*
-
-  it('Should contain a add post button on the page', () => {
-    const linkDev = fixture.debugElement.queryAll(By.css('Button'));
-    const addPostBtn: HTMLButtonElement = linkDev[0].nativeElement;
-    expect(addPostBtn).toBeTruthy();
-  });
-
-  it('Should contain a home post button on the page', () => {
-    const linkDev = fixture.debugElement.queryAll(By.css('Button'));
-    const homePostBtn: HTMLButtonElement = linkDev[1].nativeElement;
-    expect(homePostBtn).toBeTruthy();
-  });
-
-  it('Should navitage to / when home button is pressed', () => {
-    const location = TestBed.get(Location);
-    const linkDev = fixture.debugElement.queryAll(By.css('Button'));
-    const navigationButton: HTMLButtonElement = linkDev[1].nativeElement;
-    navigationButton.click();
-    fixture.detectChanges();
-    fixture.whenStable().then(() => expect(location.path('')).toBe('/'));
-  });
-*/
-
 
 
   describe('List Posts', () => {

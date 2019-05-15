@@ -19,7 +19,7 @@ import {
   MzIconModule,
   MzInputModule,
   MzProgressModule,
-  MzSpinnerModule, MzToastModule
+  MzSpinnerModule, MzToastModule, MzToastService
 } from 'ngx-materialize';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileMetadataModule} from '../../files/file-metadata.module';
@@ -29,6 +29,10 @@ import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-detail
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
+import Toast = Materialize.Toast;
+import {Post} from '../shared/post.model';
+import {Observable, of} from 'rxjs';
+import {User} from '../../authentication/shared/user.model';
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -36,6 +40,7 @@ describe('ForumPostAddComponent', () => {
   let FireStoreMock: any;
   let FileServiceMock: any;
   let FireAuthMock: any;
+  let ToastMock: any;
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -81,27 +86,61 @@ declarations: [
 
       providers: [{provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
-        {provide: AuthService, useValue: FireAuthMock}]
+        {provide: AuthService, useValue: FireAuthMock},
+        {provide: MzToastService, useValue: ToastMock}]
 
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    FireAuthMock = jasmine.createSpyObj('AuthService', ['pipe'])
+    FireAuthMock = jasmine.createSpyObj('AuthService', ['subscribe'])
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
+    FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['doc', 'valueChanges']);
+    ToastMock = jasmine.createSpyObj('MzToastService', ['show']);
     fixture = TestBed.createComponent(ForumPostAddComponent);
-    component = fixture.componentInstance;
     dh = new DOMHelper(fixture);
+    component = fixture.componentInstance;
+
 
   });
-  it('should create', () => {
-    expect(component).toBeTruthy();
+
+  describe('Add Posts', () => {
+    let helper: Helper;
+    beforeEach(() => {
+      helper = new Helper();
+
+
+
+    });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('Should subscribe on user on AuthService one time on ngOnInit', async () => {
+
+
+    });
+
   });
 
   class DummyComponent {
-
   }
+        class Helper {
+          postList: Post[] = [];
 
-});
+          getPosts(amount: number): Observable<Post[]> {
+            for (let i = 0; i < amount; i++) {
+              this.postList.push(
+                {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+              );
+            }
+            return of(this.postList);
+          }
+        }
+})
+
+
+
+
+

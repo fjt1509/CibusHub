@@ -42,6 +42,7 @@ describe('ForumPostAddComponent', () => {
   let FileServiceMock: any;
   let FireAuthMock: any;
   let ToastMock: any;
+  let helper: Helper;
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
@@ -104,8 +105,9 @@ declarations: [
   });
 
   describe('Add Posts', () => {
-    let helper: Helper;
+
     beforeEach(() => {
+      fixture.detectChanges();
       helper = new Helper();
 
 
@@ -113,12 +115,25 @@ declarations: [
     it('should create', () => {
       expect(component).toBeTruthy();
     });
+    it('Should get Current user from Authservice one time on ngOnInit', () => {
+      fixture.detectChanges();
+      expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should call onSubmit once when we click Add button', () => {
+      spyOn(component, 'onSubmit');
+      dh.clickButton('ADD POST');
+      fixture.detectChanges();
+      expect(component.onSubmit).toHaveBeenCalledTimes(1);
+    });
 
   });
 
   class DummyComponent {
   }
-        class Helper {
+
+  class Helper {
+
           postList: Post[] = [];
 
           getPosts(amount: number): Observable<Post[]> {

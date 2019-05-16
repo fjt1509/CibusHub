@@ -29,8 +29,11 @@ import {ForumPostListComponent} from '../forum-post-list/forum-post-list.compone
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
 import {ForumPostService} from '../shared/forum-post.service';
-import {of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
+import {Post} from '../shared/post.model';
+import {Comment} from '../shared/comment.model';
 
 describe('ForumPostDetailsComponent', () => {
   let component: ForumPostDetailsComponent;
@@ -39,10 +42,11 @@ describe('ForumPostDetailsComponent', () => {
   let FileServiceMock: any;
   let FireAuthMock: any;
   let ForumPostMock: any;
+  let dh: DOMHelper<ForumPostDetailsComponent>;
   beforeEach(async(() => {
-    ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById', 'getForumPostWithComments']);
+    ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById', 'getForumPostWithComments', 'addComment']);
     ForumPostMock.getForumPostById.and.returnValue(of([]));
-    ForumPostMock.getForumPostWithComments.and.returnValue(of([]));
+    ForumPostMock.addComment.and.returnValue(of([{postId: '1', comment: ''}]));
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
     FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
@@ -94,19 +98,45 @@ describe('ForumPostDetailsComponent', () => {
   }));
 
   beforeEach(() => {
+    let helper: Helper;
     fixture = TestBed.createComponent(ForumPostDetailsComponent);
+    helper = new Helper();
+    dh = new DOMHelper(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
 
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
+  it('Should get all comments, users and posts on NgOnInit', () => {
+    fixture.detectChanges();
+    expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+    expect(ForumPostMock.getForumPostById).toHaveBeenCalledTimes(1);
+    expect(ForumPostMock.getForumPostWithComments).toHaveBeenCalledTimes(1);
+  });
+  it('Should convert post date', () => {
+    const date = component.convertPostDate('08-08-08');
+    expect(date).toBe('Date: 8.8.2008');
+  });
 
 
 });
 class DummyComponent {
 
+}
+class Helper {
+
+  postList: Post[] = [];
+
+  getPosts(amount: number): Observable<Post[]> {
+    for (let i = 0; i < amount; i++) {
+      this.postList.push(
+        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+      );
+    }
+    return of(this.postList);
+  }
 }

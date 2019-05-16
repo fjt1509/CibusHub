@@ -9,7 +9,12 @@ import {AuthService} from '../../authentication/shared/auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
-import {of} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {ForumPostService} from '../shared/forum-post.service';
+import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
+import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
+import {Post} from '../shared/post.model';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('ForumPostMyPostsComponent', () => {
   let component: ForumPostMyPostsComponent;
@@ -18,15 +23,16 @@ describe('ForumPostMyPostsComponent', () => {
   let FileServiceMock: any;
   let HttpMock: HttpTestingController;
   let FireAuthMock: any;
-  let StoreMock: any;
-
-
+  let PostServiceMock: any;
+  let dh: DOMHelper<ForumPostMyPostsComponent>;
+  
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
     FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
-    StoreMock = jasmine.createSpyObj('post.action', ['GetPosts', 'AddPost'])
+    PostServiceMock = jasmine.createSpyObj('ForumPostService', ['getForumPostsFromUser'])
+    PostServiceMock.getForumPostsFromUser.and.returnValue(of([]));
 
 
     TestBed.configureTestingModule({
@@ -38,8 +44,10 @@ describe('ForumPostMyPostsComponent', () => {
       providers: [{provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
         {provide: HttpTestingController, useValue: HttpMock},
-        {provide: AuthService, useValue: FireAuthMock}],
+        {provide: AuthService, useValue: FireAuthMock},
+        {provide: ForumPostService, useValue: PostServiceMock}],
       imports: [
+        BrowserAnimationsModule,
         NgxsModule.forRoot([
           PostState
         ]),
@@ -59,22 +67,43 @@ describe('ForumPostMyPostsComponent', () => {
     .compileComponents();
   }));
 
-
   beforeEach(() => {
+    dh = new DOMHelper(fixture);
     fixture = TestBed.createComponent(ForumPostMyPostsComponent);
     HttpMock = getTestBed().get(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('Should call user info and get forum posts one time on NgOnInit', () => {
+    fixture.detectChanges();
+    expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+    expect(PostServiceMock.getForumPostsFromUser).toHaveBeenCalledTimes(1);
 
-
+  });
+  it('Should convert post date', () => {
+    const date = component.convertDate('08-08-08');
+    expect(date).toBe('Date: 8.8.2008');
+  });
 });
 class DummyComponent {
 
 }
+class Helper {
+
+  postList: Post[] = [];
+
+  getPosts(amount: number): Observable<Post[]> {
+    for (let i = 0; i < amount; i++) {
+      this.postList.push(
+        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+      );
+    }
+    return of(this.postList);
+  }
+}
+
+

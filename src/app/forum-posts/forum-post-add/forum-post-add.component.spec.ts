@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForumPostAddComponent } from './forum-post-add.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
-import {NgxsModule} from '@ngxs/store';
+import {NgxsModule, Store} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {FileService} from '../../files/shared/file.service';
@@ -34,6 +34,8 @@ import {Post} from '../shared/post.model';
 import {Observable, of} from 'rxjs';
 import {User} from '../../authentication/shared/user.model';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {GetPosts} from '../store/post.action';
+import {Router} from '@angular/router';
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -42,6 +44,7 @@ describe('ForumPostAddComponent', () => {
   let FileServiceMock: any;
   let FireAuthMock: any;
   let ToastMock: any;
+
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
@@ -76,15 +79,7 @@ declarations: [
         ]),
         AngularFirestoreModule,
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes(
-          [
-            {path: '', component: DummyComponent },
-            {path: 'add/post', component: DummyComponent},
-            {path: ':id', component: DummyComponent}
-          ]
-
-        )
-      ],
+        RouterTestingModule],
 
       providers: [{provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
@@ -105,33 +100,57 @@ declarations: [
 
   describe('Add Posts', () => {
     let helper: Helper;
+    let router: Router;
     beforeEach(() => {
+      fixture.detectChanges();
       helper = new Helper();
+      router = TestBed.get(Router);
 
 
     });
     it('should create', () => {
       expect(component).toBeTruthy();
     });
+    it('Should get Current user from Authservice one time on ngOnInit', () => {
+      fixture.detectChanges();
+      expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+    });
 
+    it('Should call onSubmit once when we click Add button', () => {
+      spyOn(component, 'onSubmit');
+      dh.clickButton('ADD POST');
+      fixture.detectChanges();
+      expect(component.onSubmit).toHaveBeenCalledTimes(1);
+    });
+
+    it('showToast should show one toast with correct message', () => {
+      spyOn(component, 'showToast')
+      component.showToast('Please select a photo for your post');
+      expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
+
+    });
+
+  });
   });
 
   class DummyComponent {
   }
-        class Helper {
-          postList: Post[] = [];
 
-          getPosts(amount: number): Observable<Post[]> {
-            for (let i = 0; i < amount; i++) {
-              this.postList.push(
-                {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
-              );
-            }
-            return of(this.postList);
-          }
-        }
-})
 
+
+ class Helper {
+
+  postList: Post[] = [];
+
+  getPosts(amount: number): Observable<Post[]> {
+    for (let i = 0; i < amount; i++) {
+      this.postList.push(
+        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+      );
+    }
+    return of(this.postList);
+  }
+}
 
 
 

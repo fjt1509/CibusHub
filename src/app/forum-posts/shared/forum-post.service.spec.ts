@@ -38,12 +38,12 @@ describe('ForumPostService', () => {
   let fsCollection: any;
 
   beforeEach(() => {
-    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload'])
-    fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection'])
-    fsCollection = jasmine.createSpyObj('collection', ['collection', 'doc', 'valueChanges', 'delete']);
-    fireStoreMock.collection.and.returnValue(fsCollection)
-    fsCollection.doc.and.returnValue(of([]))
-    fsCollection.valueChanges.and.returnValue(of([]))
+    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload']);
+    fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection']);
+    fsCollection = jasmine.createSpyObj('collection', ['valueChanges']);
+    fireStoreMock.collection.and.returnValue(fsCollection);
+    fsCollection.valueChanges.and.returnValue(of([]));
+
 
 
     TestBed.configureTestingModule({
@@ -56,7 +56,6 @@ describe('ForumPostService', () => {
         AngularFirestoreModule,
         HttpClientTestingModule,
         CommonModule,
-        ForumPostsRoutingModule,
         FlexLayoutModule,
         MzCardModule,
         MzButtonModule,
@@ -77,30 +76,15 @@ describe('ForumPostService', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     });
-    httpMock = getTestBed().get(HttpTestingController);
 
-    service = TestBed.get(ForumPostService);
-    service.getForumPosts();
 
   });
-  describe('Post Service', () => {
     beforeEach(() => {
-      service.getForumPosts();
       httpMock = getTestBed().get(HttpTestingController);
-    });
-    it('should be created', () => {
-      expect(service).toBeTruthy();
-    });
-    it('getForumPosts should return an Observable with a Post', () => {
-      const dummyPost = [{
-        postName: 'test',
-        postDescription: 'test2'
-      }];
-      service.getForumPosts().subscribe(posts => {
-        expect(posts.length).toBe(2);
-        expect(posts).toEqual(dummyPost);
-      });
-    });
-  });
+      service = TestBed.get(ForumPostService);
 
-});
+
+    });
+
+
+})

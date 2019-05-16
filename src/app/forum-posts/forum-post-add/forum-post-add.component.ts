@@ -14,6 +14,7 @@ import {User} from '../../authentication/shared/user.model';
 import {Store} from '@ngxs/store';
 import {AddPost} from '../store/post.action';
 import {MzToastService} from 'ngx-materialize';
+import {Post} from '../shared/post.model';
 
 @Component({
   selector: 'app-forum-post-add',
@@ -48,6 +49,7 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
   croppedBlob: Blob;
   currentUser: User;
   sub: Subscription;
+  posts: Post;
 
   constructor(private store: Store, private fileService: FileService, private router: Router, private authServ: AuthService, private toastService: MzToastService) { }
 
@@ -66,14 +68,14 @@ export class ForumPostAddComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.store.dispatch(new AddPost(newPost, this.getMetaDataForImage())).subscribe(() => {
         this.loading = false;
-        this.router.navigateByUrl('/forums');
+        this.router.navigateByUrl('forums');
       }, error1 => this.showToast(error1.message));
     } else {
       this.showToast('Please Enter a post name and description');
     }
   }
 
-  private getMetaDataForImage(): ImageMetaData {
+   getMetaDataForImage(): ImageMetaData {
     if (this.imageChangedEvent && this.imageChangedEvent.target &&
       this.imageChangedEvent.target.files &&
       this.imageChangedEvent.target.files.length > 0) {

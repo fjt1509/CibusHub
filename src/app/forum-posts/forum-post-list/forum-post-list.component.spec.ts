@@ -15,17 +15,11 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileMetadataModule} from '../../files/file-metadata.module';
 import {ImageCropperModule} from 'ngx-image-cropper';
-import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
-import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-details.component';
 import {ForumPostService} from '../shared/forum-post.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Post} from '../shared/post.model';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
-import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
-import {By} from '@angular/platform-browser';
-import {Location} from '@angular/common';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireModule} from '@angular/fire';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';

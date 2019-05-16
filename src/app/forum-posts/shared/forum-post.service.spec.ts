@@ -79,19 +79,12 @@ describe('ForumPostService', () => {
 
 
   });
-  describe('GetForumPostById', () => {
     beforeEach(() => {
       httpMock = getTestBed().get(HttpTestingController);
       service = TestBed.get(ForumPostService);
 
 
     });
-    it('should be created', () => {
-      expect(service).toBeTruthy();
-    });
-    it('should ...', () => {
 
-    });
 
-  })
 })

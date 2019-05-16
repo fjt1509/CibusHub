@@ -17,7 +17,7 @@
       <mz-spinner *ngIf="imageLoad">
 
       </mz-spinner>
-      <img [src]="post.url"  *ngIf="post.url">
+      <img [src]="post.url"  *ngIf="post.url" style="max-height: 500px; max-width: 500px">
     </mz-card-action>
     <mz-card-action *ngIf="errorMessage" style="text-align: center">
       <h5>{{errorMessage}}</h5>

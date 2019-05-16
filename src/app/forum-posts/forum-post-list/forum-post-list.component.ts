@@ -28,7 +28,7 @@ import {GetPosts} from '../store/post.action';
 })
 export class ForumPostListComponent implements OnInit {
   @Select(PostState.getPostList) posts: Observable<Post[]>;
-  @Select(PostState.loading) loading: Observable<boolean>;
+  //@Select(PostState.loading) loading: Observable<boolean>;
 
   constructor(private store: Store) { }
 

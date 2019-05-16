@@ -22,6 +22,7 @@ exports.Posts = functions.https.onRequest( (request, response) => {
 
   else if (request.method === 'POST'){
     const data = request.body;
+    console.log(data);
 
     const post: any = {
       postName: data.postName,
@@ -36,12 +37,26 @@ exports.Posts = functions.https.onRequest( (request, response) => {
       type: data.image.type,
       size: data.image.size
     };
+
+    if(!file.type) {
+      file.type = 'image/png'
+    }
+    if(!post.uId) {
+      post.uId = 'Anonymous';
+      post.userDisplayUrl = 'https://4.bp.blogspot.com/-H232JumEqSc/WFKY-6H-zdI/AAAAAAAAAEw/DcQaHyrxHi863t8YK4UWjYTBZ72lI0cNACLcB/s1600/profile%2Bpicture.png';
+      post.userDisplayName = 'Anonymous';
+    }
     try {
+      console.log(post);
+      console.log(file);
+
       const value = await admin.firestore().collection('files').add(file).then();
+      console.log('Past Files')
 
       const base64EncodedImageString = data.image.base64.replace(/^data:image\/\w+;base64,/, '');
       const imageBuffer = new Buffer(base64EncodedImageString, 'base64');
 
+      console.log('Past encode')
       await admin.storage().bucket().file('post-pictures/' + value.id)
         .save(imageBuffer, {
           gzip: true,
@@ -49,7 +64,7 @@ exports.Posts = functions.https.onRequest( (request, response) => {
             contentType: file.type
           }
         }).then();
-
+      console.log('past save image')
       post.pictureId = value.id;
       const aPost = await admin.firestore().collection('post')
         .add(post)

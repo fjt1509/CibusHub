@@ -42,7 +42,7 @@ export class PostState {
   getPosts({getState, setState}: StateContext<PostStateModel>) {
     return this.postServ.getForumPosts().pipe(tap((result) => {
       const state = getState();
-      setState({...state, posts: result, loading: true});
+      setState({...state, posts: result});
     }));
   }
 

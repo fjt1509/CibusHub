@@ -1,11 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-
 import { FileService } from './file.service';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {ForumPostService} from '../../forum-posts/shared/forum-post.service';
 import {AngularFireStorage, AngularFireStorageModule} from '@angular/fire/storage';
-import {of} from 'rxjs';
+
 
 describe('FileService', () => {
   let fireStorageMock: any;

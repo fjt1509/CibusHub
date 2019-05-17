@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ForumPostDetailsComponent } from './forum-post-details.component';
 import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
@@ -33,7 +32,7 @@ import {Observable, of} from 'rxjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 import {Post} from '../shared/post.model';
-import {Comment} from '../shared/comment.model';
+
 
 describe('ForumPostDetailsComponent', () => {
   let component: ForumPostDetailsComponent;
@@ -116,12 +115,17 @@ describe('ForumPostDetailsComponent', () => {
     expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
     expect(ForumPostMock.getForumPostById).toHaveBeenCalledTimes(1);
     expect(ForumPostMock.getForumPostWithComments).toHaveBeenCalledTimes(1);
+
   });
   it('Should convert post date', () => {
     const date = component.convertPostDate('08-08-08');
     expect(date).toBe('Date: 8.8.2008');
   });
+  it('Should convert comment date', () => {
 
+
+
+  });
 
 });
 class DummyComponent {

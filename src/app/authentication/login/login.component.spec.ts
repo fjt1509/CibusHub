@@ -53,6 +53,12 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should run login method on click', () => {
+    spyOn(component, 'login');
+    component.login();
+    fixture.detectChanges();
+    expect(component.login).toHaveBeenCalledTimes(1);
+  });
 
 
   class DummyComponent {

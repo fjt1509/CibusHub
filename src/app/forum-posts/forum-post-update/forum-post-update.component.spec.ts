@@ -98,11 +98,14 @@ describe('ForumPostUpdateComponent', () => {
 
   });
 
- // it('should create', () => {
-  //  expect(component).toBeTruthy();
+  it('should create', () => {
+   expect(component).toBeTruthy();
   });
-
-//});
+  it('Should get Current user from Authservice one time on ngOnInit', () => {
+    fixture.detectChanges();
+    expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+  });
+});
 
 
 class DummyComponent {

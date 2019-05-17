@@ -74,6 +74,8 @@ export class ForumPostDetailsComponent implements OnInit {
   }
 
   convertCommentDate(postTime: any) {
+    console.log(postTime);
+
     const date = postTime.toDate();
     const dateString = date.toLocaleDateString();
     return 'Date: ' + dateString;
@@ -94,7 +96,7 @@ export class ForumPostDetailsComponent implements OnInit {
     comment.uId = this.currentUser.uid;
     comment.userDisplayUrl = this.currentUser.photoURL;
     comment.userDisplayName = this.currentUser.displayName;
-    comment.time = date;
+    comment.time = new Date();
 
     this.postService.addComment(this.postId, comment).then( () => {this.createComment = false; this.commentForm.reset(); });
   }

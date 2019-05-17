@@ -19,13 +19,24 @@ export class ForumPostService {
 
   forumPostCollection: AngularFirestoreCollection<Post>;
   commentCollection: AngularFirestoreCollection<Comment>;
+  usersForumPosts: Observable<Post[]>;
   forumPosts: Observable<Post[]>;
+
+
 
   constructor(private db: AngularFirestore, private fileService: FileService, private http: HttpClient) { }
 
 
   getForumPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>('https://us-central1-cibushub.cloudfunctions.net/Posts');
+    this.forumPostCollection = this.db.collection<Post>('post', ref => ref.orderBy('postTime', 'desc'));
+    return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map(actions => {
+      return actions.map( action => {
+        const data = action.payload.doc.data() as Post;
+        const id = action.payload.doc.id;
+        return{id, ...data};
+      });
+    }));
+
   }
 
 
@@ -71,7 +82,7 @@ export class ForumPostService {
 
   getForumPostsFromUser(userId: string): Observable<Post[]> {
     this.forumPostCollection = this.db.collection<Post>('post', ref => ref.where('uId', '==', userId));
-    return this.forumPosts = this.forumPostCollection.snapshotChanges().pipe(map( actions => {
+    return this.usersForumPosts = this.forumPostCollection.snapshotChanges().pipe(map(actions => {
       return actions.map( action => {
         const data = action.payload.doc.data() as Post;
         const id = action.payload.doc.id;

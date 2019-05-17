@@ -37,7 +37,7 @@ describe('ForumPostUpdateComponent', () => {
   let FireAuthMock: any;
   let FireStoreMock: any;
   let FileServiceMock: any;
-
+  let event: Event;
   beforeEach(async(() => {
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
@@ -105,6 +105,23 @@ describe('ForumPostUpdateComponent', () => {
     fixture.detectChanges();
     expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
   });
+  it('imageChangedEvent should be =event when calling uploadFile',() =>{
+    component.uploadFile(event);
+    expect(component.imageChangedEvent).toBe(event)
+  });
+  it('ImageChangedEvent should be null and newImageSelected should be false when calling reset image',() =>{
+    component.resetImage();
+    expect(component.imageChangedEvent).toBe(null);
+    expect(component.newImageSelected).toBe(false);
+  });
+  it('showToast should show one toast with correct message', () => {
+    spyOn(component, 'showToast')
+    component.showToast('Please select a photo for your post');
+    expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
+    expect(component.showToast).toHaveBeenCalledTimes(1);
+
+  });
+
 });
 
 

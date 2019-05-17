@@ -25,7 +25,7 @@ describe('ForumPostMyPostsComponent', () => {
   let FireAuthMock: any;
   let PostServiceMock: any;
   let dh: DOMHelper<ForumPostMyPostsComponent>;
-  
+
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
     FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));

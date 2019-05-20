@@ -27,6 +27,18 @@ import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.c
 import any = jasmine.any;
 import {of} from 'rxjs';
 import {post} from 'selenium-webdriver/http';
+import {Injectable} from '@angular/core';
+import {AngularFirestoreCollection, DocumentSnapshot} from '@angular/fire/firestore';
+import {promise} from 'selenium-webdriver';
+import {Post} from './post.model';
+import {from, Timestamp} from 'rxjs';
+import {Observable} from 'rxjs';
+import {pipe} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Comment} from './comment.model';
+import {ImageMetaData} from '../../files/shared/image-metadata.model';
+import {HttpClient} from '@angular/common/http';
+import {ofAction} from '@ngxs/store';
 
 
 
@@ -40,9 +52,13 @@ describe('ForumPostService', () => {
   beforeEach(() => {
     fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload']);
     fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection']);
-    fsCollection = jasmine.createSpyObj('collection', ['valueChanges']);
-    fireStoreMock.collection.and.returnValue(fsCollection);
+    fsCollection = jasmine.createSpyObj('collection', ['snapshotChanges', 'doc', 'valueChanges', 'delete']);
+    fsCollection.snapshotChanges.and.returnValue(of([]));
+    fsCollection.delete.and.returnValue('2');
+    fsCollection.doc.and.returnValue('2');
     fsCollection.valueChanges.and.returnValue(of([]));
+    fireStoreMock.collection.and.returnValue(fsCollection);
+
 
 
 
@@ -85,6 +101,16 @@ describe('ForumPostService', () => {
 
 
     });
+  it('should create', () => {
+    expect(service).toBeTruthy();
+  });
+  it('should call Firestore to get forum posts once', () => {
+    service.getForumPosts();
+    expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
+  });
+  it('should call Firestore to get forum post from user', () => {
+    service.getForumPostsFromUser('2');
+    expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
+  });
 
-
-})
+});

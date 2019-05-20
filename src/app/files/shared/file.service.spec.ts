@@ -34,9 +34,10 @@ describe('FileService', () => {
     expect(service).toBeTruthy();
   });
   it('should call Firestorage once when calling getFileUrl', () => {
-      service.getFileUrl(id);
-      expect(fireStorageMock.ref).toHaveBeenCalledTimes(1);
+    service.getFileUrl(id);
+    expect(fireStorageMock.ref).toHaveBeenCalledTimes(1);
   })
+
 
 
 });

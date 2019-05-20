@@ -121,7 +121,7 @@ declarations: [
       expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
 
     });
-    it('showToast should show one toast with correct message', () => {
+    it('showToast should be called only once', () => {
       spyOn(component, 'showToast')
       component.showToast('Please select a photo for your post');
       fixture.detectChanges();

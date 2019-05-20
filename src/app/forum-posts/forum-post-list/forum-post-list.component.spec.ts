@@ -162,8 +162,9 @@ describe('ForumPostListComponent', () => {
     });
 
     it('Should show date stuff', () => {
-      const date = component.convertDate('08-08-08');
-      expect(date).toBe('Date: 8.8.2008');
+      const date = new Date(2008, 8, 8);
+      const stringDate = component.convertDate(date);
+      expect(stringDate).toBe('Date: 8/8/2008');
     });
   });
 });
@@ -176,7 +177,7 @@ describe('ForumPostListComponent', () => {
     getPosts(amount: number): Observable<Post[]> {
       for (let i = 0; i < amount; i++) {
         this.postList.push(
-          {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+          {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i, postTime: new Date('08.08.08')}
         );
       }
       return of(this.postList);

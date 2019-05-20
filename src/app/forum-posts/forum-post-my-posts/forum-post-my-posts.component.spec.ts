@@ -76,6 +76,7 @@ describe('ForumPostMyPostsComponent', () => {
   });
 
   it('should create', () => {
+    console.log(component.postList + 'TEST HERE');
     expect(component).toBeTruthy();
   });
   it('Should call user info and get forum posts one time on NgOnInit', () => {
@@ -85,8 +86,9 @@ describe('ForumPostMyPostsComponent', () => {
 
   });
   it('Should convert post date', () => {
-    const date = component.convertDate('08-08-08');
-    expect(date).toBe('Date: 8.8.2008');
+    const date = new Date(2008, 7, 8);
+    const stringDate = component.convertDate(date);
+    expect(stringDate).toBe('Date: 8/8/2008');
   });
 });
 class DummyComponent {

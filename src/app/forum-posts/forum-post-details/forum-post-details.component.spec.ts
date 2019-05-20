@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, getTestBed, TestBed} from '@angular/core/testing';
 import { ForumPostDetailsComponent } from './forum-post-details.component';
 import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
@@ -6,7 +6,7 @@ import {NgxsModule} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {FileService} from '../../files/shared/file.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AuthService} from '../../authentication/shared/auth.service';
 import {CommonModule} from '@angular/common';
@@ -39,12 +39,13 @@ describe('ForumPostDetailsComponent', () => {
   let fixture: ComponentFixture<ForumPostDetailsComponent>;
   let FireStoreMock: any;
   let FileServiceMock: any;
+  let HttpMock: HttpTestingController;
   let FireAuthMock: any;
   let ForumPostMock: any;
   let dh: DOMHelper<ForumPostDetailsComponent>;
   beforeEach(async(() => {
     ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById', 'getForumPostWithComments', 'addComment']);
-    ForumPostMock.getForumPostById.and.returnValue(of([]));
+    ForumPostMock.getForumPostById.and.returnValue(of([{id: 'test', postTime: new Date()}]));
     ForumPostMock.addComment.and.returnValue(of([{postId: '1', comment: ''}]));
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
     FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
@@ -90,6 +91,7 @@ describe('ForumPostDetailsComponent', () => {
       ],
       providers: [{provide: AngularFirestore, useValue: FireStoreMock},
         {provide: FileService, useValue: FileServiceMock},
+        {provide: HttpTestingController, useValue: HttpMock},
         {provide: AuthService, useValue: FireAuthMock},
         {provide: ForumPostService, useValue: ForumPostMock}]
     })
@@ -100,6 +102,8 @@ describe('ForumPostDetailsComponent', () => {
     let helper: Helper;
     fixture = TestBed.createComponent(ForumPostDetailsComponent);
     helper = new Helper();
+    HttpMock = getTestBed().get(HttpTestingController);
+
     dh = new DOMHelper(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -108,6 +112,7 @@ describe('ForumPostDetailsComponent', () => {
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
   it('Should get all comments, users and posts on NgOnInit', () => {
@@ -118,13 +123,14 @@ describe('ForumPostDetailsComponent', () => {
 
   });
   it('Should convert post date', () => {
-    const date = component.convertPostDate('08-08-08');
-    expect(date).toBe('Date: 8.8.2008');
+    const date = new Date(2008, 8, 8);
+    const stringDate = component.convertPostDate(date);
+    expect(stringDate).toBe('Date: 8/8/2008');
   });
   it('Should convert comment date', () => {
     const date = new Date(2008, 8, 8);
     const stringDate = component.convertCommentDate(date);
-    expect(stringDate).toBe('Date: 8.8.2008')
+    expect(stringDate).toBe('Date: 8/8/2008');
 
   });
 });

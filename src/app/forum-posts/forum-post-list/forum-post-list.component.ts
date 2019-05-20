@@ -35,15 +35,13 @@ export class ForumPostListComponent implements OnInit {
     this.store.dispatch(new GetPosts());
   }
 
-  convertDate(postTime: Date) {
-    if (postTime != null) {
-        console.log(postTime);
-        const date = postTime;
-        const dateString = date.toLocaleDateString();
-        return 'Date: ' + dateString;
-    }
-
-  }
-
-
+  // convertDate(postTime: any) {
+  //   console.log(postTime);
+  //   // const date = new Date(postTime.nanos);
+  //   // console.log(date);
+  //
+  //   const date = postTime.toDate();
+  //   const dateString = date.toLocaleDateString();
+  //   return 'Date: ' + dateString;
+  // }
 }

@@ -9,6 +9,9 @@ import {tap} from 'rxjs/operators';
 import {FileService} from '../../files/shared/file.service';
 import {User} from '../../authentication/shared/user.model';
 import {AuthService} from '../../authentication/shared/auth.service';
+import {google} from '@google-cloud/firestore/build/protos/firestore_proto_api';
+import Timestamp = google.protobuf.Timestamp;
+import {post} from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-forum-post-details',
@@ -32,7 +35,7 @@ import {AuthService} from '../../authentication/shared/auth.service';
 export class ForumPostDetailsComponent implements OnInit {
 
   postId: string;
-  post: Observable<any>;
+  post: Observable<Post>;
   comments: Observable<any[]>;
   commentForm = new FormGroup( {
     comment: new FormControl('')
@@ -54,7 +57,8 @@ export class ForumPostDetailsComponent implements OnInit {
     this.post = this.postService.getForumPostById(this.postId).pipe(tap(postRef => {
       if (postRef.pictureId) {
         this.imageLoad = true;
-        this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; }, error1 => this.errorMessage = error1 );
+        this.fileService.getFileUrl(postRef.pictureId).subscribe( url => {postRef.url = url; this.imageLoad = false; },
+            error1 => this.errorMessage = error1 );
       }
     }));
 
@@ -67,33 +71,29 @@ export class ForumPostDetailsComponent implements OnInit {
 
   }
 
-  convertPostDate(postTime: Date) {
-    if (postTime != null) {
-      const date = postTime;
-      const dateString = date.toLocaleDateString();
-      return 'Date: ' + dateString;
-    }
-  }
+  // convertPostDate(postTime: any) {
+  //   // const date = new Date(postTime.nanos);
+  //   const date = postTime.toDate();
+  //   const dateString = date.toLocaleDateString();
+  //   return 'Date: ' + dateString;
+  // }
 
-  convertCommentDate(commentTime: Date) {
-    if( commentTime != null) {
-      console.log(commentTime);
+  // convertCommentDate(postTime: any) {
+  //   console.log(postTime);
+  //   // const date = new Date(postTime.nanos);
+  //   const date = postTime.toDate();
+  //   const dateString = date.toLocaleDateString();
+  //   return 'Date: ' + dateString;
+  //
+  // }
 
-      const date = commentTime;
-      const dateString = date.toLocaleDateString();
-      return 'Date: ' + dateString;
-    }
+  convertTime(time: any) {
+    // const date = new Date(time);
+    // const date = time.toDate();
+    const hours = time.getHours();
+    const minutes = '0' + time.getMinutes();
 
-  }
-
-  convertTime(time: Date) {
-    if (time != null) {
-      const date = time;
-      const hours = date.getHours();
-      const minutes = '0' + date.getMinutes();
-
-      return 'Time: ' + hours + ':' + minutes.substr(-2);
-    }
+    return 'Time: ' + hours + ':' + minutes.substr(-2);
   }
 
   onSubmit() {

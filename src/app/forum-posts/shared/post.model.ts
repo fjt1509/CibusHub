@@ -4,7 +4,7 @@ export class Post  {
   id?: string;
   postName: string;
   postDescription: string;
-  postTime?: Date;
+  postTime?: any;
   comments?: Comment[];
   pictureId?: string;
   url?: string;

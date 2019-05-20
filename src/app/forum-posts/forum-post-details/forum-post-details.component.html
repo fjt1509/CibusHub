@@ -7,7 +7,7 @@
         <h5 style="margin-left: 2%">{{post.userDisplayName}}</h5>
         </div>
           <h4>{{post.postName}}</h4>
-      <p style="color: gray; font-size: large">{{convertPostDate(post.postTime)}}</p>
+      <p style="color: gray; font-size: large">Date: {{post.postTime |date: 'dd-MM-yyyy hh:mm'}}</p>
       <hr>
     </mz-card-title>
     <mz-card-content style="text-align: center">
@@ -72,8 +72,7 @@
         </div>
       </mz-card-title>
       <mz-card-content>
-        <p style="color: gray; font-size: large">{{convertCommentDate(comment.time)}}</p>
-        <p style="color: gray; font-size: large">{{convertTime(comment.time)}}</p>
+        <p style="color: gray; font-size: large">{{comment.time |date: 'dd-MM-yyyy hh:mm'}}</p>
         <p style="margin-top: 2%; font-size: large">{{comment.comment}}</p>
       </mz-card-content>
     </mz-card>

@@ -130,11 +130,7 @@ declarations: [
 
     it('imageChangedEvent should be =event when calling uploadFile',() =>{
       component.uploadFile(event);
-      expect(component.imageChangedEvent).toBe(event)
-    });
-    it('should',() =>{
-
-
+      expect(component.imageChangedEvent).toBe(event);
     });
   });
   });

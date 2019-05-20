@@ -7,7 +7,6 @@ import {AddPost, DeletePost, GetPosts, SetSelectedPost, UpdatePost, UpdatePostIn
 export class PostStateModel {
   posts: Post[];
   selectedPost: Post;
-  loading: boolean;
 }
 
 @State<PostStateModel>({
@@ -15,7 +14,6 @@ export class PostStateModel {
   defaults: {
     posts: [],
     selectedPost: null,
-    loading: false
   }
 })
 
@@ -28,10 +26,7 @@ export class PostState {
     return state.posts;
   }
 
-  @Selector()
-  static loading(state: PostStateModel) {
-    return state.loading;
-  }
+
 
   @Selector()
   static getSelectedPost(state: PostStateModel) {

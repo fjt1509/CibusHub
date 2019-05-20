@@ -67,27 +67,33 @@ export class ForumPostDetailsComponent implements OnInit {
 
   }
 
-  convertPostDate(postTime: any) {
-    const date = postTime.toDate();
-    const dateString = date.toLocaleDateString();
-    return 'Date: ' + dateString;
+  convertPostDate(postTime: Date) {
+    if (postTime != null) {
+      const date = postTime;
+      const dateString = date.toLocaleDateString();
+      return 'Date: ' + dateString;
+    }
   }
 
-  convertCommentDate(commentTime: any) {
-    console.log(commentTime);
+  convertCommentDate(commentTime: Date) {
+    if( commentTime != null) {
+      console.log(commentTime);
 
-    const date = commentTime.toDate();
-    const dateString = date.toLocaleDateString();
-    return 'Date: ' + dateString;
+      const date = commentTime;
+      const dateString = date.toLocaleDateString();
+      return 'Date: ' + dateString;
+    }
 
   }
 
-  convertTime(time: any) {
-    const date = time.toDate();
-    const hours = date.getHours();
-    const minutes = '0' + date.getMinutes();
+  convertTime(time: Date) {
+    if (time != null) {
+      const date = time;
+      const hours = date.getHours();
+      const minutes = '0' + date.getMinutes();
 
-    return 'Time: ' + hours + ':' + minutes.substr(-2);
+      return 'Time: ' + hours + ':' + minutes.substr(-2);
+    }
   }
 
   onSubmit() {

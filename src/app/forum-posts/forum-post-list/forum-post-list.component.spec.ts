@@ -162,7 +162,7 @@ describe('ForumPostListComponent', () => {
     });
 
     it('Should show date stuff', () => {
-      const date = new Date(2008, 8, 8);
+      const date = new Date(2008, 7, 8);
       const stringDate = component.convertDate(date);
       expect(stringDate).toBe('Date: 8/8/2008');
     });

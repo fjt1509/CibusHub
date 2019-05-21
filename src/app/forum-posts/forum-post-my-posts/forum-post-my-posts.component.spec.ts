@@ -76,7 +76,6 @@ describe('ForumPostMyPostsComponent', () => {
   });
 
   it('should create', () => {
-    console.log(component.postList + 'TEST HERE');
     expect(component).toBeTruthy();
   });
   it('Should call user info and get forum posts one time on NgOnInit', () => {

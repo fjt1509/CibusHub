@@ -45,7 +45,7 @@ import {ofAction} from '@ngxs/store';
 describe('ForumPostService', () => {
   let fireStoreMock: any;
   let fileServiceMock: any;
-  let httpMock: HttpTestingController;
+  let httpMock: any;
   let service: ForumPostService;
   let fsCollection: any;
 
@@ -54,6 +54,8 @@ describe('ForumPostService', () => {
     fireStoreMock = jasmine.createSpyObj('AngularFireStore', ['collection']);
     fsCollection = jasmine.createSpyObj('collection', ['snapshotChanges', 'doc', 'valueChanges', 'delete']);
     fsCollection.snapshotChanges.and.returnValue(of([]));
+    httpMock = jasmine.createSpyObj('HttpClient', ['post', 'put']);
+    httpMock.post.and.returnValue(of([]))
     fsCollection.delete.and.returnValue('2');
     fsCollection.doc.and.returnValue('2');
     fsCollection.valueChanges.and.returnValue(of([]));
@@ -88,7 +90,8 @@ describe('ForumPostService', () => {
       ],
       providers: [
         {provide: AngularFirestore, useValue: fireStoreMock},
-        {provide: FileService, useValue: fileServiceMock}
+        {provide: FileService, useValue: fileServiceMock},
+        {provide: HttpClient, useValue: httpMock}
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     });
@@ -96,7 +99,7 @@ describe('ForumPostService', () => {
 
   });
     beforeEach(() => {
-      httpMock = getTestBed().get(HttpTestingController);
+
       service = TestBed.get(ForumPostService);
 
 
@@ -108,9 +111,29 @@ describe('ForumPostService', () => {
     service.getForumPosts();
     expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
   });
-  it('should call Firestore to get forum post from user', () => {
+  it('should call Firestore to get forum post from specific user', () => {
     service.getForumPostsFromUser('2');
     expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
   });
-
+  it('should call a http request once and to the right url address', () => {
+    let helper: Helper;
+    const post = new Post();
+      service.updatePostNoNewImage(post)
+    expect(httpMock.put).toHaveBeenCalledTimes(1);
+    expect(httpMock.put).toHaveBeenCalledWith('https://us-central1-cibushub.cloudfunctions.net/Posts', Object({ id: undefined, pictureId: undefined, url: undefined, postName: undefined, postTime: undefined, postDescription: undefined, uId: undefined, userDisplayUrl: undefined, userDisplayName: undefined }) );
+  });
 });
+class Helper {
+  postList: Post[] = [];
+
+  getPosts(amount: number): Observable<Post[]> {
+    for (let i = 0; i < amount; i++) {
+      this.postList.push(
+        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i, postTime: new Date('08.08.08')}
+      );
+    }
+    return of(this.postList);
+  }
+}
+
+

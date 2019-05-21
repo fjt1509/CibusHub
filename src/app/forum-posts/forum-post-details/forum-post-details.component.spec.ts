@@ -2,7 +2,7 @@ import {async, ComponentFixture, getTestBed, TestBed} from '@angular/core/testin
 import { ForumPostDetailsComponent } from './forum-post-details.component';
 import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
-import {NgxsModule} from '@ngxs/store';
+import {NgxsModule, Store} from '@ngxs/store';
 import {PostState} from '../store/post.state';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {FileService} from '../../files/shared/file.service';
@@ -32,6 +32,11 @@ import {Observable, of} from 'rxjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DOMHelper} from '../../../Test-Helpers/DOMHelper';
 import {Post} from '../shared/post.model';
+import {timestamp} from 'rxjs/operators';
+import {google} from '@google-cloud/firestore/build/protos/firestore_proto_api';
+import Timestamp = google.protobuf.Timestamp;
+import {Router} from '@angular/router';
+import {GetPosts} from '../store/post.action';
 
 
 describe('ForumPostDetailsComponent', () => {
@@ -46,14 +51,14 @@ describe('ForumPostDetailsComponent', () => {
   beforeEach(async(() => {
     ForumPostMock = jasmine.createSpyObj('ForumPostService', ['getForumPostById', 'getForumPostWithComments', 'addComment']);
     ForumPostMock.getForumPostById.and.returnValue(of([{id: 'test', postTime: new Date()}]));
-    ForumPostMock.addComment.and.returnValue(of([{postId: '1', comment: ''}]));
+    ForumPostMock.addComment.and.returnValue(of([{postId: '1', comment: 'testComment'}]));
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState'])
-    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka'}));
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['dispatch']);
     TestBed.configureTestingModule({
 
-      declarations: [ ForumPostDetailsComponent, ForumPostListComponent, ForumPostAddComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent ],
+      declarations: [ForumPostDetailsComponent, ForumPostListComponent, ForumPostAddComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
         NO_ERRORS_SCHEMA
@@ -77,16 +82,15 @@ describe('ForumPostDetailsComponent', () => {
         MzToastModule,
         NgxsModule.forRoot([
           PostState
-      ]),
+        ]),
         AngularFirestoreModule,
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(
           [
-            {path: '', component: DummyComponent },
+            {path: '', component: DummyComponent},
             {path: 'add/post', component: DummyComponent},
             {path: ':id', component: DummyComponent}
           ]
-
         )
       ],
       providers: [{provide: AngularFirestore, useValue: FireStoreMock},
@@ -95,7 +99,7 @@ describe('ForumPostDetailsComponent', () => {
         {provide: AuthService, useValue: FireAuthMock},
         {provide: ForumPostService, useValue: ForumPostMock}]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -103,7 +107,8 @@ describe('ForumPostDetailsComponent', () => {
     fixture = TestBed.createComponent(ForumPostDetailsComponent);
     helper = new Helper();
     HttpMock = getTestBed().get(HttpTestingController);
-
+    let location: Location;
+    let router: Router;
     dh = new DOMHelper(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -122,20 +127,26 @@ describe('ForumPostDetailsComponent', () => {
     expect(ForumPostMock.getForumPostWithComments).toHaveBeenCalledTimes(1);
 
   });
-});
-class DummyComponent {
 
-}
-class Helper {
+  it('should convert time', () => {
 
-  postList: Post[] = [];
+  });
 
-  getPosts(amount: number): Observable<Post[]> {
-    for (let i = 0; i < amount; i++) {
-      this.postList.push(
-        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
-      );
-    }
-    return of(this.postList);
+  class DummyComponent {
+
   }
-}
+
+  class Helper {
+
+    postList: Post[] = [];
+
+    getPosts(amount: number): Observable<Post[]> {
+      for (let i = 0; i < amount; i++) {
+        this.postList.push(
+          {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+        );
+      }
+      return of(this.postList);
+    }
+  }
+})

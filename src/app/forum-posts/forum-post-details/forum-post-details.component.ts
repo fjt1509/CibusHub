@@ -71,25 +71,7 @@ export class ForumPostDetailsComponent implements OnInit {
 
   }
 
-  // convertPostDate(postTime: any) {
-  //   // const date = new Date(postTime.nanos);
-  //   const date = postTime.toDate();
-  //   const dateString = date.toLocaleDateString();
-  //   return 'Date: ' + dateString;
-  // }
-
-  // convertCommentDate(postTime: any) {
-  //   console.log(postTime);
-  //   // const date = new Date(postTime.nanos);
-  //   const date = postTime.toDate();
-  //   const dateString = date.toLocaleDateString();
-  //   return 'Date: ' + dateString;
-  //
-  // }
-
   convertTime(time: any) {
-    // const date = new Date(time);
-    // const date = time.toDate();
     const hours = time.getHours();
     const minutes = '0' + time.getMinutes();
 

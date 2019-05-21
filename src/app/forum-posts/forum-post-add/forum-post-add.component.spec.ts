@@ -28,6 +28,7 @@ import {Observable, of} from 'rxjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AddPost, GetPosts} from '../store/post.action';
+import Toast = Materialize.Toast;
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -40,13 +41,13 @@ describe('ForumPostAddComponent', () => {
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
-    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka' }));
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka'}));
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['doc', 'valueChanges']);
     ToastMock = jasmine.createSpyObj('MzToastService', ['show']);
     TestBed.configureTestingModule({
-declarations: [
-  ForumPostAddComponent],
+      declarations: [
+        ForumPostAddComponent],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA,
         NO_ERRORS_SCHEMA
@@ -65,6 +66,7 @@ declarations: [
         FileMetadataModule,
         ImageCropperModule,
         MzProgressModule,
+        RouterTestingModule,
         MzToastModule,
         NgxsModule.forRoot([
           PostState
@@ -79,7 +81,7 @@ declarations: [
         {provide: MzToastService, useValue: ToastMock}]
 
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -121,38 +123,38 @@ declarations: [
       expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
 
     });
-    it('showToast should be called only once', () => {
-      spyOn(component, 'showToast')
+    it('method show should be called from Toastservice when calling Showtoast', () => {
       component.showToast('Please select a photo for your post');
       fixture.detectChanges();
-      expect(component.showToast).toHaveBeenCalledTimes(1);
+      expect(ToastMock.show).toHaveBeenCalledTimes(1);
     });
 
-    it('imageChangedEvent should be =event when calling uploadFile',() =>{
+    it('imageChangedEvent should be =event when calling uploadFile', () => {
       component.uploadFile(event);
       expect(component.imageChangedEvent).toBe(event);
     });
-  });
+
+
   });
 
   class DummyComponent {
   }
 
 
+  class Helper {
 
- class Helper {
+    postList: Post[] = [];
 
-  postList: Post[] = [];
-
-  getPosts(amount: number): Observable<Post[]> {
-    for (let i = 0; i < amount; i++) {
-      this.postList.push(
-        {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
-      );
+    getPosts(amount: number): Observable<Post[]> {
+      for (let i = 0; i < amount; i++) {
+        this.postList.push(
+          {id: 'abc' + i, postName: 'item' + i, postDescription: 'abc' + i}
+        );
+      }
+      return of(this.postList);
     }
-    return of(this.postList);
   }
-}
+});
 
 
 

@@ -51,12 +51,6 @@ export class ForumPostMyPostsComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
   }
 
-  convertDate(postTime: any) {
-    const date = new Date(postTime);
-    const dateString = date.toLocaleDateString();
-
-    return 'Date: ' + dateString;
-  }
 
 
   deletePost(id: string) {

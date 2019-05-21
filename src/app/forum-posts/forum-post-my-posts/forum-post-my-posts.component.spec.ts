@@ -84,12 +84,7 @@ describe('ForumPostMyPostsComponent', () => {
     expect(PostServiceMock.getForumPostsFromUser).toHaveBeenCalledTimes(1);
 
   });
-  it('Should call convert a date correctly', () => {
-    const date = new Date(2008,7,8);
-    const stringDate = component.convertDate(date);
-    expect(stringDate).toBe('Date: 8.8.2008');
 
-  });
 });
 class DummyComponent {
 

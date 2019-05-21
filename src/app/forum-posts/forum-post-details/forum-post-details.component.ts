@@ -71,12 +71,7 @@ export class ForumPostDetailsComponent implements OnInit {
 
   }
 
-  convertTime(time: any) {
-    const hours = time.getHours();
-    const minutes = '0' + time.getMinutes();
 
-    return 'Time: ' + hours + ':' + minutes.substr(-2);
-  }
 
   onSubmit() {
     const date = new Date();

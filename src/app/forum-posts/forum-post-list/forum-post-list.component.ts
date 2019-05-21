@@ -32,16 +32,8 @@ export class ForumPostListComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetPosts());
+
   }
 
-  // convertDate(postTime: any) {
-  //   console.log(postTime);
-  //   // const date = new Date(postTime.nanos);
-  //   // console.log(date);
-  //
-  //   const date = postTime.toDate();
-  //   const dateString = date.toLocaleDateString();
-  //   return 'Date: ' + dateString;
-  // }
+
 }

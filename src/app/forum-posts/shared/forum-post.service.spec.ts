@@ -122,6 +122,14 @@ describe('ForumPostService', () => {
     expect(httpMock.put).toHaveBeenCalledTimes(1);
     expect(httpMock.put).toHaveBeenCalledWith('https://us-central1-cibushub.cloudfunctions.net/Posts', Object({ id: undefined, pictureId: undefined, url: undefined, postName: undefined, postTime: undefined, postDescription: undefined, uId: undefined, userDisplayUrl: undefined, userDisplayName: undefined }) );
   });
+  it('should return a post when addpostwithimage is called', function () {
+    let helper: Helper = new Helper();
+    helper.getPosts(1);
+    spyOn(service, 'addPostWithImage').and.returnValue(of(helper.postList[0]));
+    service.addPostWithImage(helper.postList[0], helper.getImageMeta()).subscribe(post => {
+      expect(post).toEqual(helper.postList[0]);
+    });
+  });
 });
 class Helper {
   postList: Post[] = [];
@@ -133,6 +141,18 @@ class Helper {
       );
     }
     return of(this.postList);
+  }
+
+  getImageMeta(): ImageMetaData {
+    const imageMetaData: ImageMetaData = {
+      fileMeta: {
+        name: 'imageName',
+        id: 'imageId',
+        size: 50,
+        type: 'type:pdf'
+      }
+    }
+    return imageMetaData;
   }
 }
 

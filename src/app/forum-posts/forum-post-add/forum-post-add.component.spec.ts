@@ -27,8 +27,7 @@ import {Post} from '../shared/post.model';
 import {Observable, of} from 'rxjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {AddPost, GetPosts} from '../store/post.action';
-import Toast = Materialize.Toast;
+import {ImageMetaData} from '../../files/shared/image-metadata.model';
 
 describe('ForumPostAddComponent', () => {
   let component: ForumPostAddComponent;
@@ -41,7 +40,7 @@ describe('ForumPostAddComponent', () => {
   let dh: DOMHelper<ForumPostAddComponent>;
   beforeEach(async(() => {
     FireAuthMock = jasmine.createSpyObj('AuthService', ['authState']);
-    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'blya@kurwa.cyka'}));
+    FireAuthMock.authState.and.returnValue(of({uid: 'testUser', email: 'test@testuser.dk'}));
     FileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
     FireStoreMock = jasmine.createSpyObj('AngularFireStore', ['doc', 'valueChanges']);
     ToastMock = jasmine.createSpyObj('MzToastService', ['show']);
@@ -99,8 +98,6 @@ describe('ForumPostAddComponent', () => {
       fixture.detectChanges();
       helper = new Helper();
       router = TestBed.get(Router);
-
-
     });
     it('should create', () => {
       expect(component).toBeTruthy();
@@ -108,6 +105,9 @@ describe('ForumPostAddComponent', () => {
     it('Should get Current user from Authservice one time on ngOnInit', () => {
       fixture.detectChanges();
       expect(FireAuthMock.authState).toHaveBeenCalledTimes(1);
+    });
+    it('Should be an Add button first on the page', () => {
+      expect(dh.singleText('button')).toBe('ADD POST');
     });
 
     it('Should call onSubmit once when we click Add button', () => {
@@ -117,30 +117,24 @@ describe('ForumPostAddComponent', () => {
       expect(component.onSubmit).toHaveBeenCalledTimes(1);
     });
 
-    it('showToast should show one toast with correct message', () => {
-      spyOn(component, 'showToast')
-      component.showToast('Please select a photo for your post');
-      expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
-
-    });
     it('method show should be called from Toastservice when calling Showtoast', () => {
       component.showToast('Please select a photo for your post');
       fixture.detectChanges();
       expect(ToastMock.show).toHaveBeenCalledTimes(1);
     });
 
+    it('showToast should show one toast with correct message', () => {
+      spyOn(component, 'showToast')
+      component.showToast('Please select a photo for your post');
+      expect(component.showToast).toHaveBeenCalledWith('Please select a photo for your post')
+
+    });
+
     it('imageChangedEvent should be =event when calling uploadFile', () => {
       component.uploadFile(event);
       expect(component.imageChangedEvent).toBe(event);
     });
-
-
   });
-
-  class DummyComponent {
-  }
-
-
   class Helper {
 
     postList: Post[] = [];
@@ -154,8 +148,9 @@ describe('ForumPostAddComponent', () => {
       return of(this.postList);
     }
   }
-});
 
+
+});
 
 
 

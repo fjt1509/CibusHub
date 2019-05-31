@@ -4,7 +4,6 @@ import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore'
 import {FileService} from '../../files/shared/file.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {CommonModule} from '@angular/common';
-import {ForumPostsRoutingModule} from '../forum-posts-routing.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {
   MzButtonModule,
@@ -24,23 +23,12 @@ import {ForumPostDetailsComponent} from '../forum-post-details/forum-post-detail
 import {ForumPostAddComponent} from '../forum-post-add/forum-post-add.component';
 import {ForumPostMyPostsComponent} from '../forum-post-my-posts/forum-post-my-posts.component';
 import {ForumPostUpdateComponent} from '../forum-post-update/forum-post-update.component';
-import any = jasmine.any;
 import {of} from 'rxjs';
 import {post} from 'selenium-webdriver/http';
-import {Injectable} from '@angular/core';
-import {AngularFirestoreCollection, DocumentSnapshot} from '@angular/fire/firestore';
-import {promise} from 'selenium-webdriver';
 import {Post} from './post.model';
-import {from, Timestamp} from 'rxjs';
 import {Observable} from 'rxjs';
-import {pipe} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Comment} from './comment.model';
 import {ImageMetaData} from '../../files/shared/image-metadata.model';
 import {HttpClient} from '@angular/common/http';
-import {ofAction} from '@ngxs/store';
-
-
 
 describe('ForumPostService', () => {
   let fireStoreMock: any;
@@ -56,20 +44,11 @@ describe('ForumPostService', () => {
     fsCollection.snapshotChanges.and.returnValue(of([]));
     httpMock = jasmine.createSpyObj('HttpClient', ['post', 'put']);
     httpMock.post.and.returnValue(of([]))
-    fsCollection.delete.and.returnValue('2');
-    fsCollection.doc.and.returnValue('2');
     fsCollection.valueChanges.and.returnValue(of([]));
     fireStoreMock.collection.and.returnValue(fsCollection);
 
-
-
-
     TestBed.configureTestingModule({
-      declarations: [ForumPostDetailsComponent,
-        ForumPostListComponent,
-        ForumPostAddComponent,
-        ForumPostMyPostsComponent,
-        ForumPostUpdateComponent],
+      declarations: [ForumPostDetailsComponent, ForumPostListComponent, ForumPostAddComponent, ForumPostMyPostsComponent, ForumPostUpdateComponent],
       imports: [
         AngularFirestoreModule,
         HttpClientTestingModule,
@@ -95,14 +74,10 @@ describe('ForumPostService', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     });
-
-
   });
     beforeEach(() => {
-
       service = TestBed.get(ForumPostService);
-
-
+      let helper: Helper;
     });
   it('should create', () => {
     expect(service).toBeTruthy();
@@ -115,14 +90,13 @@ describe('ForumPostService', () => {
     service.getForumPostsFromUser('2');
     expect(fireStoreMock.collection).toHaveBeenCalledTimes(1);
   });
-  it('should call a http request once and to the right url address', () => {
-    let helper: Helper;
+  it('update post should call a http request once and to the right url address', () => {
     const post = new Post();
-      service.updatePostNoNewImage(post)
+    service.updatePostNoNewImage(post)
     expect(httpMock.put).toHaveBeenCalledTimes(1);
     expect(httpMock.put).toHaveBeenCalledWith('https://us-central1-cibushub.cloudfunctions.net/Posts', Object({ id: undefined, pictureId: undefined, url: undefined, postName: undefined, postTime: undefined, postDescription: undefined, uId: undefined, userDisplayUrl: undefined, userDisplayName: undefined }) );
   });
-  it('should return a post when addpostwithimage is called', function () {
+  it(' should return a post when addpostwithimage is called', function () {
     let helper: Helper = new Helper();
     helper.getPosts(1);
     spyOn(service, 'addPostWithImage').and.returnValue(of(helper.postList[0]));
